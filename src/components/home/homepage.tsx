@@ -62,11 +62,9 @@ function LanguageSwitcher({ lang, ariaLabel, compact = false, onDark = false }: 
 
 function WorkCard({
   work,
-  viewDetails,
   imageAltSuffix,
 }: {
   work: WorkItem;
-  viewDetails: string;
   imageAltSuffix: string;
 }) {
   return (
@@ -88,12 +86,9 @@ function WorkCard({
           />
         </div>
       </div>
-      <div className="space-y-3 p-6">
+      <div className="space-y-2.5 p-6">
         <h3 className="text-[1.28rem] font-semibold tracking-[-0.015em] text-[var(--text-main)]">{work.title}</h3>
         <p className="text-[0.97rem] leading-7 text-[var(--text-muted)]">{work.result}</p>
-        <a href="#contact" className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)]">
-          {viewDetails} <span aria-hidden>→</span>
-        </a>
       </div>
     </article>
   );
@@ -275,12 +270,7 @@ export function HomePage() {
 
           <div className="grid gap-5 lg:grid-cols-2">
             {copy.work.items.map((work) => (
-              <WorkCard
-                key={work.title}
-                work={work}
-                viewDetails={copy.work.viewDetails}
-                imageAltSuffix={copy.work.imageAltSuffix}
-              />
+              <WorkCard key={work.title} work={work} imageAltSuffix={copy.work.imageAltSuffix} />
             ))}
           </div>
         </section>
@@ -307,60 +297,15 @@ export function HomePage() {
           </ul>
         </section>
 
-        <section id="smart-help" className="mt-12 rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-6 sm:p-7">
-          <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-center">
-            <div className="space-y-4">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                {copy.smartHelpTeaser.eyebrow}
-              </p>
-              <h2 className="text-[1.7rem] font-semibold leading-[1.14] tracking-[-0.02em] text-[var(--text-main)] sm:text-[2.15rem]">
-                {copy.smartHelpTeaser.title}
-              </h2>
-              <p className="max-w-xl text-[0.98rem] leading-7 text-[var(--text-muted)]">{copy.smartHelpTeaser.description}</p>
-              <a
-                href="#contact"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--line-strong)] bg-[var(--accent-soft)] px-5 text-sm font-semibold text-[var(--accent)]"
-              >
-                {copy.smartHelpTeaser.cta}
-              </a>
-            </div>
-
-            <div className="relative rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-subtle)] p-4 shadow-[0_24px_52px_-42px_rgba(14,19,28,0.72)] sm:p-5">
-              <div className="rounded-xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                  {copy.smartHelpTeaser.assistantLabel}
-                </p>
-                <p className="mt-2 text-sm text-[var(--text-main)]">{copy.smartHelpTeaser.assistantQuestion}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {copy.smartHelpTeaser.assistantOptions.map((question) => (
-                    <span
-                      key={question}
-                      className="rounded-full border border-[var(--line-soft)] px-3 py-1 text-[0.72rem] font-medium text-[var(--text-main)]"
-                    >
-                      {question}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="absolute -bottom-4 right-4 rounded-xl border border-[var(--line-soft)] bg-[var(--surface-main)] px-4 py-3 shadow-[0_15px_32px_-23px_rgba(14,19,28,0.82)]">
-                <p className="text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                  {copy.smartHelpTeaser.suggestedPathLabel}
-                </p>
-                <p className="mt-1 text-sm font-semibold text-[var(--text-main)]">{copy.smartHelpTeaser.suggestedPathValue}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section id="packages" className="mt-12 space-y-6">
-          <header className="space-y-2">
+          <header className="space-y-3">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
               {copy.packages.eyebrow}
             </p>
             <h2 className="text-[1.8rem] font-semibold leading-[1.12] tracking-[-0.02em] text-[var(--text-main)] sm:text-[2.3rem]">
               {copy.packages.title}
             </h2>
+            <p className="max-w-2xl text-[0.98rem] leading-7 text-[var(--text-muted)]">{copy.packages.subtitle}</p>
           </header>
 
           <div className="grid gap-4 lg:grid-cols-3">
@@ -370,13 +315,15 @@ export function HomePage() {
                 className={`rounded-2xl border p-5 shadow-[0_18px_40px_-34px_rgba(14,19,28,0.72)] ${
                   item.featured
                     ? "border-[var(--accent)] bg-[var(--accent-soft)]"
-                    : "border-[var(--line-soft)] bg-[var(--surface-main)]"
+                    : item.premium
+                      ? "border-[var(--line-strong)] bg-[var(--surface-main)]"
+                      : "border-[var(--line-soft)] bg-[var(--surface-subtle)]"
                 }`}
               >
-                <p className="text-[0.66rem] font-semibold uppercase tracking-[0.15em] text-[var(--text-muted)]">{item.tag}</p>
-                <h3 className="mt-2 text-[1.25rem] font-semibold tracking-[-0.015em] text-[var(--text-main)]">{item.name}</h3>
-                <p className="mt-2 text-lg font-semibold text-[var(--text-main)]">{item.price}</p>
-                <ul className="mt-4 space-y-2 text-[0.9rem] text-[var(--text-muted)]">
+                <h3 className="text-[1.25rem] font-semibold tracking-[-0.015em] text-[var(--text-main)]">{item.name}</h3>
+                <p className="mt-2 text-[1.42rem] font-semibold tracking-[-0.015em] text-[var(--text-main)]">{item.price}</p>
+                <p className="mt-2 text-[0.92rem] leading-7 text-[var(--text-muted)]">{item.description}</p>
+                <ul className="mt-5 space-y-2 text-[0.9rem] text-[var(--text-muted)]">
                   {item.points.map((point) => (
                     <li key={point} className="flex items-start gap-2.5">
                       <span className="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[var(--accent)]" />

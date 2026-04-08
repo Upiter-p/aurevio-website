@@ -89,12 +89,16 @@ export type HomeTranslations = {
   packages: {
     eyebrow: string;
     title: string;
+    subtitle: string;
     items: Array<{
       name: string;
-      tag: string;
       price: string;
+      description: string;
       points: string[];
+      cta: string;
+      light?: boolean;
       featured?: boolean;
+      premium?: boolean;
     }>;
   };
   finalCta: {
@@ -212,27 +216,63 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       suggestedPathValue: "Growth Engine Package",
     },
     packages: {
-      eyebrow: "Engagement Models",
-      title: "Premium, outcome-led options.",
+      eyebrow: "Pricing",
+      title: "Choose the right starting point for your business.",
+      subtitle: "From a clean brochure-style website to a full digital growth system.",
       items: [
         {
-          name: "Foundation",
-          tag: "Website + Core SEO",
-          price: "From $3,000+",
-          points: ["Premium website build", "Local SEO baseline", "Lead capture setup"],
+          name: "Starter",
+          price: "From $750",
+          description:
+            "For businesses that need a clean, professional online presence at the right starting budget.",
+          points: [
+            "1–3 pages",
+            "Responsive design",
+            "Contact form / WhatsApp",
+            "Trust-building layout",
+            "Basic SEO setup",
+            "Domain connection",
+          ],
+          cta: "Get Started",
+          light: true,
         },
         {
-          name: "Growth Engine",
-          tag: "Web + SEO + Paid Ads",
-          price: "From $5,000+",
-          points: ["Conversion website system", "Search campaign setup", "Landing page stack"],
+          name: "Growth",
+          price: "From $1950",
+          description:
+            "For businesses that need a stronger website built to generate enquiries, not just look good.",
+          points: [
+            "5–8 pages",
+            "Conversion-focused structure",
+            "Lead capture forms",
+            "WhatsApp / email / CTA flow",
+            "Local SEO foundation",
+            "Mobile and speed optimization",
+            "Services / case studies / FAQ sections",
+            "Basic conversion tracking",
+          ],
+          cta: "Choose Growth",
           featured: true,
         },
         {
-          name: "Performance Partner",
-          tag: "Ongoing Growth",
-          price: "Custom Retainer",
-          points: ["Ads + SEO optimisation", "Automation workflows", "Monthly strategy reporting"],
+          name: "Scale",
+          price: "From $6500",
+          description:
+            "For companies that need a premium digital growth system with strategy, automation, and performance in mind.",
+          points: [
+            "Custom premium design",
+            "Strategic website structure",
+            "Multi-page site + landing pages",
+            "SEO pages for services / locations",
+            "CRM / webhook / automation integration",
+            "Google Ads / Meta Ads setup",
+            "Lead qualification logic",
+            "Analytics and conversion tracking",
+            "Multilingual setup",
+            "Premium launch support",
+          ],
+          cta: "Book a Call",
+          premium: true,
         },
       ],
     },
@@ -388,27 +428,63 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       suggestedPathValue: "Пакет Growth Engine",
     },
     packages: {
-      eyebrow: "Моделі співпраці",
-      title: "Преміальні варіанти, орієнтовані на результат.",
+      eyebrow: "Ціни",
+      title: "Оберіть правильну стартову модель для вашого бізнесу.",
+      subtitle: "Від чистого презентаційного сайту до повної цифрової системи зростання.",
       items: [
         {
-          name: "База",
-          tag: "Сайт + базове SEO",
-          price: "Від $3,000+",
-          points: ["Преміальна розробка сайту", "Базова локальна SEO-основа", "Налаштування захоплення лідів"],
+          name: "Starter",
+          price: "From $750",
+          description:
+            "Для бізнесів, яким потрібна чиста професійна онлайн-присутність у правильному стартовому бюджеті.",
+          points: [
+            "1–3 сторінки",
+            "Адаптивний дизайн",
+            "Контактна форма / WhatsApp",
+            "Структура для формування довіри",
+            "Базове SEO налаштування",
+            "Підключення домену",
+          ],
+          cta: "Почати",
+          light: true,
         },
         {
-          name: "Система зростання",
-          tag: "Сайт + SEO + платна реклама",
-          price: "Від $5,000+",
-          points: ["Конверсійна система сайту", "Налаштування пошукових кампаній", "Пакет цільових сторінок"],
+          name: "Growth",
+          price: "From $1950",
+          description:
+            "Для бізнесів, яким потрібен сильніший сайт, що генерує заявки, а не лише гарно виглядає.",
+          points: [
+            "5–8 сторінок",
+            "Структура з фокусом на конверсію",
+            "Форми захоплення лідів",
+            "WhatsApp / email / CTA логіка",
+            "Локальна SEO основа",
+            "Мобільна та швидкісна оптимізація",
+            "Секції послуг / кейсів / FAQ",
+            "Базове відстеження конверсій",
+          ],
+          cta: "Обрати Growth",
           featured: true,
         },
         {
-          name: "Партнер зростання",
-          tag: "Постійний розвиток",
-          price: "Індивідуальний ретейнер",
-          points: ["Оптимізація реклами + SEO", "Автоматизація процесів", "Щомісячна стратегічна звітність"],
+          name: "Scale",
+          price: "From $6500",
+          description:
+            "Для компаній, яким потрібна преміальна система цифрового зростання з фокусом на стратегію та автоматизацію.",
+          points: [
+            "Індивідуальний преміальний дизайн",
+            "Стратегічна структура сайту",
+            "Багатосторінковий сайт + лендінги",
+            "SEO-сторінки для послуг / локацій",
+            "CRM / webhook / automation інтеграція",
+            "Налаштування Google Ads / Meta Ads",
+            "Логіка кваліфікації лідів",
+            "Аналітика та відстеження конверсій",
+            "Мультимовне налаштування",
+            "Преміальна підтримка запуску",
+          ],
+          cta: "Замовити дзвінок",
+          premium: true,
         },
       ],
     },
@@ -564,27 +640,63 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       suggestedPathValue: "Пакет Growth Engine",
     },
     packages: {
-      eyebrow: "Форматы сотрудничества",
-      title: "Премиальные варианты, ориентированные на результат.",
+      eyebrow: "Цены",
+      title: "Выберите правильную стартовую модель для вашего бизнеса.",
+      subtitle: "От аккуратного презентационного сайта до полной цифровой системы роста.",
       items: [
         {
-          name: "База",
-          tag: "Сайт + базовое SEO",
-          price: "От $3,000+",
-          points: ["Премиальная разработка сайта", "Базовая локальная SEO-основа", "Настройка захвата лидов"],
+          name: "Starter",
+          price: "From $750",
+          description:
+            "Для бизнеса, которому нужно аккуратное профессиональное онлайн-присутствие в правильном стартовом бюджете.",
+          points: [
+            "1–3 страницы",
+            "Адаптивный дизайн",
+            "Контактная форма / WhatsApp",
+            "Структура для доверия",
+            "Базовая SEO-настройка",
+            "Подключение домена",
+          ],
+          cta: "Начать",
+          light: true,
         },
         {
-          name: "Система роста",
-          tag: "Сайт + SEO + платная реклама",
-          price: "От $5,000+",
-          points: ["Конверсионная система сайта", "Настройка поисковых кампаний", "Набор лендингов"],
+          name: "Growth",
+          price: "From $1950",
+          description:
+            "Для бизнеса, которому нужен более сильный сайт, созданный для заявок, а не только для внешнего вида.",
+          points: [
+            "5–8 страниц",
+            "Конверсионная структура",
+            "Формы захвата лидов",
+            "WhatsApp / email / CTA логика",
+            "Локальная SEO-основа",
+            "Мобильная и скоростная оптимизация",
+            "Разделы услуг / кейсов / FAQ",
+            "Базовый трекинг конверсий",
+          ],
+          cta: "Выбрать Growth",
           featured: true,
         },
         {
-          name: "Партнёр по росту",
-          tag: "Постоянное развитие",
-          price: "Индивидуальный ретейнер",
-          points: ["Оптимизация рекламы + SEO", "Автоматизация процессов", "Ежемесячная стратегическая отчётность"],
+          name: "Scale",
+          price: "From $6500",
+          description:
+            "Для компаний, которым нужна премиальная цифровая система роста с акцентом на стратегию и автоматизацию.",
+          points: [
+            "Индивидуальный премиальный дизайн",
+            "Стратегическая структура сайта",
+            "Многостраничный сайт + лендинги",
+            "SEO-страницы для услуг / локаций",
+            "CRM / webhook / automation интеграция",
+            "Настройка Google Ads / Meta Ads",
+            "Логика квалификации лидов",
+            "Аналитика и трекинг конверсий",
+            "Мультиязычная настройка",
+            "Премиальная поддержка запуска",
+          ],
+          cta: "Заказать звонок",
+          premium: true,
         },
       ],
     },
