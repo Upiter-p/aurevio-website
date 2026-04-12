@@ -117,8 +117,8 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
   en: {
     brand: "Aurevio",
     contact: {
-      email: "hello@aurevio.co.uk",
-      whatsappNumber: "447000000000",
+      email: "aureviodig@gmail.com",
+      whatsappNumber: "447388772715",
       strategyCallSubject: "Aurevio Strategy Call",
     },
     nav: {
@@ -333,8 +333,8 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
   ua: {
     brand: "Aurevio",
     contact: {
-      email: "hello@aurevio.co.uk",
-      whatsappNumber: "447000000000",
+      email: "aureviodig@gmail.com",
+      whatsappNumber: "447388772715",
       strategyCallSubject: "Стратегічний дзвінок Aurevio",
     },
     nav: {
@@ -549,8 +549,8 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
   ru: {
     brand: "Aurevio",
     contact: {
-      email: "hello@aurevio.co.uk",
-      whatsappNumber: "447000000000",
+      email: "aureviodig@gmail.com",
+      whatsappNumber: "447388772715",
       strategyCallSubject: "Стратегический звонок Aurevio",
     },
     nav: {
