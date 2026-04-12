@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { QuickHelpWidget } from "@/components/home/quick-help-widget";
 import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from "@/components/home/translations";
@@ -153,6 +153,8 @@ export function HomePage() {
   const { locale: lang, copy } = getHomeTranslations(searchParams.get("lang"));
   const hasHeroImage = true;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeWorkSlide, setActiveWorkSlide] = useState(0);
+  const workScrollerRef = useRef<HTMLDivElement | null>(null);
   const strategyCallHref = `mailto:${copy.contact.email}?subject=${encodeURIComponent(copy.contact.strategyCallSubject)}`;
   const whatsappHref = `https://wa.me/${copy.contact.whatsappNumber}`;
 
@@ -193,6 +195,42 @@ export function HomePage() {
       document.body.style.overflow = previousOverflow;
     };
   }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    setActiveWorkSlide(0);
+  }, [lang]);
+
+  function getWorkSlideWidth() {
+    const scroller = workScrollerRef.current;
+    if (!scroller) return 0;
+
+    const firstSlide = scroller.querySelector<HTMLElement>("[data-work-slide]");
+    if (!firstSlide) return scroller.clientWidth;
+
+    const styles = window.getComputedStyle(scroller);
+    const gap = Number.parseFloat(styles.columnGap || styles.gap || "0") || 0;
+    return firstSlide.getBoundingClientRect().width + gap;
+  }
+
+  function updateActiveWorkSlide() {
+    const scroller = workScrollerRef.current;
+    if (!scroller) return;
+
+    const slideWidth = getWorkSlideWidth();
+    if (slideWidth <= 0) return;
+
+    const nextIndex = Math.round(scroller.scrollLeft / slideWidth);
+    setActiveWorkSlide(Math.max(0, Math.min(copy.work.items.length - 1, nextIndex)));
+  }
+
+  function scrollWork(direction: -1 | 1) {
+    const scroller = workScrollerRef.current;
+    if (!scroller) return;
+
+    const slideWidth = getWorkSlideWidth();
+    const delta = slideWidth > 0 ? slideWidth * direction : scroller.clientWidth * 0.9 * direction;
+    scroller.scrollBy({ left: delta, behavior: "smooth" });
+  }
 
   return (
     <div className="bg-[var(--bg-main)]">
@@ -332,24 +370,93 @@ export function HomePage() {
         </section>
 
         <section id="work" className="mt-12 space-y-6">
-          <header className="space-y-2">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">{copy.work.eyebrow}</p>
-            <h2 className="text-[1.8rem] font-semibold leading-[1.12] tracking-[-0.02em] text-[var(--text-main)] sm:text-[2.3rem]">
-              {copy.work.title}
-            </h2>
+          <header className="flex items-end justify-between gap-4">
+            <div className="space-y-2">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">{copy.work.eyebrow}</p>
+              <h2 className="text-[1.8rem] font-semibold leading-[1.12] tracking-[-0.02em] text-[var(--text-main)] sm:text-[2.3rem]">
+                {copy.work.title}
+              </h2>
+            </div>
+            <div className="hidden items-center gap-2 lg:flex">
+              <button
+                type="button"
+                onClick={() => scrollWork(-1)}
+                aria-label={copy.work.previousSlideAriaLabel}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line-soft)] bg-[var(--surface-main)] text-[var(--text-main)] shadow-[0_12px_22px_-18px_rgba(14,19,28,0.72)] transition hover:border-[var(--line-strong)]"
+              >
+                <span aria-hidden>←</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollWork(1)}
+                aria-label={copy.work.nextSlideAriaLabel}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line-soft)] bg-[var(--surface-main)] text-[var(--text-main)] shadow-[0_12px_22px_-18px_rgba(14,19,28,0.72)] transition hover:border-[var(--line-strong)]"
+              >
+                <span aria-hidden>→</span>
+              </button>
+            </div>
           </header>
 
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-8 bg-gradient-to-r from-[var(--bg-main)] to-transparent lg:block" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-8 bg-gradient-to-l from-[var(--bg-main)] to-transparent lg:block" />
 
-            <div className="flex touch-pan-x snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div
+              ref={workScrollerRef}
+              onScroll={updateActiveWorkSlide}
+              className="flex touch-pan-x snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 pr-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
               {copy.work.items.map((work) => (
-                <div key={work.title} className="min-w-0 shrink-0 basis-full snap-start lg:basis-[calc(50%-0.625rem)]">
+                <div
+                  key={work.title}
+                  data-work-slide
+                  className="min-w-0 shrink-0 basis-[88%] snap-start sm:basis-[74%] lg:basis-[calc(50%-0.625rem)]"
+                >
                   <WorkCard work={work} imageAltSuffix={copy.work.imageAltSuffix} />
                 </div>
               ))}
             </div>
+
+            <div className="mt-2.5 flex items-center justify-center gap-1.5 sm:hidden">
+              {copy.work.items.map((work, index) => (
+                <button
+                  key={`${work.title}-dot`}
+                  type="button"
+                  aria-label={`${index + 1}`}
+                  onClick={() => {
+                    const scroller = workScrollerRef.current;
+                    if (!scroller) return;
+                    const slideWidth = getWorkSlideWidth();
+                    scroller.scrollTo({ left: slideWidth * index, behavior: "smooth" });
+                  }}
+                  className={`h-1.5 rounded-full transition ${
+                    index === activeWorkSlide ? "w-5 bg-[var(--accent)]" : "w-2 bg-[var(--line-strong)]"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-12 space-y-6">
+          <header className="space-y-2">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              {copy.testimonials.eyebrow}
+            </p>
+            <h2 className="text-[1.8rem] font-semibold leading-[1.12] tracking-[-0.02em] text-[var(--text-main)] sm:text-[2.3rem]">
+              {copy.testimonials.title}
+            </h2>
+          </header>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            {copy.testimonials.items.map((item) => (
+              <article
+                key={item}
+                className="rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_16px_36px_-30px_rgba(14,19,28,0.75)]"
+              >
+                <p className="text-[0.98rem] leading-7 text-[var(--text-main)]">{item}</p>
+              </article>
+            ))}
           </div>
         </section>
 

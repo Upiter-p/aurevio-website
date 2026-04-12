@@ -63,12 +63,19 @@ export type HomeTranslations = {
     title: string;
     viewDetails: string;
     imageAltSuffix: string;
+    previousSlideAriaLabel: string;
+    nextSlideAriaLabel: string;
     items: Array<{
       category: string;
       title: string;
       image: string;
       result: string;
     }>;
+  };
+  testimonials: {
+    eyebrow: string;
+    title: string;
+    items: string[];
   };
   industries: {
     eyebrow: string;
@@ -187,6 +194,8 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       title: "Proof of execution.",
       viewDetails: "View Details",
       imageAltSuffix: "case study preview",
+      previousSlideAriaLabel: "Previous work slide",
+      nextSlideAriaLabel: "Next work slide",
       items: [
         {
           category: "Website",
@@ -213,6 +222,15 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           image: "/images/home/kids-bedtime-stories.png",
           result: "A children’s mobile app focused on bedtime stories and a calm, engaging reading experience for families.",
         },
+      ],
+    },
+    testimonials: {
+      eyebrow: "Client feedback",
+      title: "What clients value",
+      items: [
+        "“Clear structure, stronger positioning, and a much more professional digital presence.”",
+        "“Fast communication, thoughtful execution, and a result that feels premium.”",
+        "“More clarity, better presentation, and a website that feels built for real enquiries.”",
       ],
     },
     industries: {
@@ -423,6 +441,8 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       title: "Підтверджені результати.",
       viewDetails: "Детальніше",
       imageAltSuffix: "превʼю кейсу",
+      previousSlideAriaLabel: "Попередній слайд робіт",
+      nextSlideAriaLabel: "Наступний слайд робіт",
       items: [
         {
           category: "Сайт",
@@ -449,6 +469,15 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           image: "/images/home/kids-bedtime-stories.png",
           result: "Дитячий мобільний додаток з казками на ніч і спокійним, приємним форматом читання для сімей.",
         },
+      ],
+    },
+    testimonials: {
+      eyebrow: "Відгуки",
+      title: "Що цінують клієнти",
+      items: [
+        "«Чітка структура, сильніше позиціонування і набагато професійніша цифрова присутність.»",
+        "«Швидка комунікація, продумане виконання і результат, який виглядає преміально.»",
+        "«Більше ясності, краща подача і сайт, який справді працює на звернення.»",
       ],
     },
     industries: {
@@ -659,6 +688,8 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       title: "Подтверждённые результаты.",
       viewDetails: "Подробнее",
       imageAltSuffix: "превью кейса",
+      previousSlideAriaLabel: "Предыдущий слайд работ",
+      nextSlideAriaLabel: "Следующий слайд работ",
       items: [
         {
           category: "Сайт",
@@ -685,6 +716,15 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           image: "/images/home/kids-bedtime-stories.png",
           result: "Детское мобильное приложение со сказками на ночь и спокойным, приятным форматом чтения для семей.",
         },
+      ],
+    },
+    testimonials: {
+      eyebrow: "Отзывы",
+      title: "Что ценят клиенты",
+      items: [
+        "«Чёткая структура, более сильное позиционирование и гораздо более профессиональное цифровое присутствие.»",
+        "«Быстрая коммуникация, продуманная реализация и результат, который выглядит премиально.»",
+        "«Больше ясности, лучшая подача и сайт, который действительно работает на обращения.»",
       ],
     },
     industries: {
