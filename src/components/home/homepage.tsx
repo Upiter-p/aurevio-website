@@ -210,8 +210,8 @@ export function HomePage() {
                   className="absolute inset-0 bg-black/55 backdrop-blur-[1px]"
                   aria-label={copy.nav.menu}
                 />
-                <div className="absolute inset-x-3 top-[calc(env(safe-area-inset-top)+0.75rem)] max-h-[calc(100svh-env(safe-area-inset-top)-1.5rem)] overflow-y-auto overscroll-contain rounded-xl border border-white/20 bg-[#111821]/95 p-4 shadow-[0_24px_50px_-34px_rgba(0,0,0,0.85)] backdrop-blur">
-                  <nav className="flex flex-col gap-2 text-sm font-medium text-white">
+                <div className="absolute right-3 top-[calc(env(safe-area-inset-top)+0.75rem)] w-[min(290px,calc(100vw-1.5rem))] max-h-[72svh] overflow-y-auto overscroll-contain rounded-xl border border-white/20 bg-[#111821]/95 p-3.5 shadow-[0_24px_50px_-34px_rgba(0,0,0,0.85)] backdrop-blur">
+                  <nav className="flex flex-col gap-1.5 text-sm font-medium text-white">
                     <a href="#solutions" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
                       {copy.nav.services}
                     </a>
@@ -228,7 +228,7 @@ export function HomePage() {
                       {copy.nav.contact}
                     </a>
                   </nav>
-                  <div className="mt-3 border-t border-white/15 pt-3">
+                  <div className="mt-2.5 border-t border-white/15 pt-2.5">
                     <LanguageSwitcher lang={lang} ariaLabel={copy.nav.languageSwitcherAriaLabel} compact onDark />
                     <a
                       href="#contact"

@@ -115,7 +115,7 @@ export function QuickHelpWidget({
       {isOpen ? (
         <>
           <div className="fixed inset-0 z-[150] bg-black/50 backdrop-blur-[1px] sm:hidden" onClick={closeWidget} />
-          <section className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] top-[calc(env(safe-area-inset-top)+0.75rem)] z-[160] overflow-hidden rounded-xl border border-[var(--line-soft)] bg-[var(--surface-main)] shadow-[0_28px_58px_-34px_rgba(14,19,28,0.85)] sm:hidden">
+          <section className="fixed inset-x-3 bottom-[calc(env(safe-area-inset-bottom)+0.6rem)] z-[160] flex max-h-[min(72svh,640px)] flex-col overflow-hidden rounded-xl border border-[var(--line-soft)] bg-[var(--surface-main)] shadow-[0_28px_58px_-34px_rgba(14,19,28,0.85)] sm:hidden">
             <header className="border-b border-[var(--line-soft)] px-4 py-3">
               <div className="flex items-start justify-between gap-3">
                 <h3 className="max-w-[230px] text-[1rem] font-semibold tracking-[-0.01em] text-[var(--text-main)]">
@@ -135,18 +135,18 @@ export function QuickHelpWidget({
               </div>
             </header>
 
-            <div className="h-[calc(100%-78px)] overflow-y-auto overscroll-contain px-4 py-4">
+            <div className="min-h-0 overflow-y-auto overscroll-contain px-4 py-3">
               {isSummaryStep ? (
                 <>
                   <div className="space-y-2 rounded-xl border border-[var(--line-soft)] bg-[var(--surface-subtle)] p-3">
                     {questions.map((question) => (
                       <p key={question.key} className="text-[0.82rem] leading-6 text-[var(--text-main)]">
-                        <span className="font-semibold">{question.label}</span> {answers[question.key]}
-                      </p>
-                    ))}
-                  </div>
+                      <span className="font-semibold">{question.label}</span> {answers[question.key]}
+                    </p>
+                  ))}
+                </div>
 
-                  <div className="mt-4 space-y-2">
+                  <div className="mt-3 space-y-2">
                     <a
                       href="#contact"
                       onClick={closeWidget}
@@ -182,7 +182,7 @@ export function QuickHelpWidget({
               ) : (
                 <>
                   <p className="text-sm font-semibold leading-6 text-[var(--text-main)]">{currentQuestion.label}</p>
-                  <div className="mt-3 grid gap-2">
+                  <div className="mt-2.5 grid gap-2">
                     {currentQuestion.options.map((option) => {
                       const selected = answers[currentQuestion.key] === option;
 
@@ -203,7 +203,7 @@ export function QuickHelpWidget({
                     })}
                   </div>
 
-                  <div className="mt-4 flex items-center justify-between">
+                  <div className="mt-3.5 flex items-center justify-between">
                     <button
                       type="button"
                       onClick={() => setStep((prev) => Math.max(0, prev - 1))}
