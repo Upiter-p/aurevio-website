@@ -2,10 +2,13 @@
 
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { QuickHelpWidget } from "@/components/home/quick-help-widget";
 import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from "@/components/home/translations";
 
 type WorkItem = HomeTranslations["work"]["items"][number];
+type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
+const OVERLAY_EVENT = "aurevio:overlay-change";
 
 type LanguageSwitcherProps = {
   lang: Locale;
@@ -98,8 +101,47 @@ export function HomePage() {
   const searchParams = useSearchParams();
   const { locale: lang, copy } = getHomeTranslations(searchParams.get("lang"));
   const hasHeroImage = true;
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const strategyCallHref = `mailto:${copy.contact.email}?subject=${encodeURIComponent(copy.contact.strategyCallSubject)}`;
   const whatsappHref = `https://wa.me/${copy.contact.whatsappNumber}`;
+
+  function emitMenuOverlayChange(open: boolean) {
+    if (typeof window === "undefined") return;
+    window.dispatchEvent(new CustomEvent<OverlayEventDetail>(OVERLAY_EVENT, { detail: { source: "menu", open } }));
+  }
+
+  function closeMobileMenu() {
+    setIsMobileMenuOpen(false);
+    emitMenuOverlayChange(false);
+  }
+
+  function openMobileMenu() {
+    setIsMobileMenuOpen(true);
+    emitMenuOverlayChange(true);
+  }
+
+  useEffect(() => {
+    const onOverlayChange = (event: Event) => {
+      const detail = (event as CustomEvent<OverlayEventDetail>).detail;
+      if (detail?.source === "quick-help" && detail.open) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener(OVERLAY_EVENT, onOverlayChange as EventListener);
+    return () => window.removeEventListener(OVERLAY_EVENT, onOverlayChange as EventListener);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <div className="bg-[var(--bg-main)]">
@@ -152,39 +194,54 @@ export function HomePage() {
             </a>
           </div>
 
-          <details className="relative md:hidden">
-            <summary className="list-none rounded-md border border-white/25 bg-black/35 px-3 py-1.5 text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-white">
+          <div className="relative md:hidden">
+            <button
+              type="button"
+              onClick={() => (isMobileMenuOpen ? closeMobileMenu() : openMobileMenu())}
+              className="rounded-md border border-white/25 bg-black/35 px-3 py-1.5 text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-white"
+            >
               {copy.nav.menu}
-            </summary>
-            <div className="absolute right-0 top-10 w-[250px] rounded-lg border border-white/20 bg-[#111821]/95 p-4 shadow-[0_24px_50px_-34px_rgba(0,0,0,0.85)] backdrop-blur">
-              <nav className="flex flex-col gap-2 text-sm font-medium text-white">
-                <a href="#solutions" className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                  {copy.nav.services}
-                </a>
-                <a href="#work" className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                  {copy.nav.work}
-                </a>
-                <a href="#smart-help" className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                  {copy.nav.process}
-                </a>
-                <a href="#packages" className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                  {copy.nav.pricing}
-                </a>
-                <a href="#contact" className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                  {copy.nav.contact}
-                </a>
-              </nav>
-              <div className="mt-3 border-t border-white/15 pt-3">
-                <LanguageSwitcher lang={lang} ariaLabel={copy.nav.languageSwitcherAriaLabel} compact onDark />
-                <a
-                  href="#contact"
-                  className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-md bg-[linear-gradient(180deg,#3c659e_0%,#2a4770_100%)] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white"
-                >
-                  {copy.nav.bookCall}
-                </a>
+            </button>
+            {isMobileMenuOpen ? (
+              <div className="fixed inset-0 z-[120]">
+                <button
+                  type="button"
+                  onClick={closeMobileMenu}
+                  className="absolute inset-0 bg-black/55 backdrop-blur-[1px]"
+                  aria-label={copy.nav.menu}
+                />
+                <div className="absolute inset-x-3 top-[calc(env(safe-area-inset-top)+0.75rem)] max-h-[calc(100svh-env(safe-area-inset-top)-1.5rem)] overflow-y-auto overscroll-contain rounded-xl border border-white/20 bg-[#111821]/95 p-4 shadow-[0_24px_50px_-34px_rgba(0,0,0,0.85)] backdrop-blur">
+                  <nav className="flex flex-col gap-2 text-sm font-medium text-white">
+                    <a href="#solutions" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+                      {copy.nav.services}
+                    </a>
+                    <a href="#work" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+                      {copy.nav.work}
+                    </a>
+                    <a href="#smart-help" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+                      {copy.nav.process}
+                    </a>
+                    <a href="#packages" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+                      {copy.nav.pricing}
+                    </a>
+                    <a href="#contact" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+                      {copy.nav.contact}
+                    </a>
+                  </nav>
+                  <div className="mt-3 border-t border-white/15 pt-3">
+                    <LanguageSwitcher lang={lang} ariaLabel={copy.nav.languageSwitcherAriaLabel} compact onDark />
+                    <a
+                      href="#contact"
+                      onClick={closeMobileMenu}
+                      className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-md bg-[linear-gradient(180deg,#3c659e_0%,#2a4770_100%)] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white"
+                    >
+                      {copy.nav.bookCall}
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </details>
+            ) : null}
+          </div>
         </header>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(96svh-78px)] w-full max-w-[1240px] items-center px-4 pb-10 sm:px-6 sm:pb-12 lg:px-10 lg:pb-14">
