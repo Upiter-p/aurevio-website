@@ -64,6 +64,7 @@ export type HomeTranslations = {
     viewDetails: string;
     imageAltSuffix: string;
     items: Array<{
+      category: string;
       title: string;
       image: string;
       result: string;
@@ -174,6 +175,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           summary:
             "QR-based menu systems, digital ordering flows, and seamless payment experiences for restaurants and cafes.",
         },
+        {
+          title: "Mobile Apps",
+          summary:
+            "Custom mobile app design and development for businesses that need stronger digital products, user flows, and customer engagement.",
+        },
       ],
     },
     work: {
@@ -183,14 +189,29 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       imageAltSuffix: "case study preview",
       items: [
         {
+          category: "Website",
           title: "QWave Hospitality",
           image: "/images/home/case-qwave.png",
           result: "Sharper positioning and enquiry flow for hospitality-focused procurement.",
         },
         {
+          category: "Website",
           title: "RosPro Engineering",
           image: "/images/home/case-rospro.png",
           result: "Clearer service architecture and lead routing for technical buyers.",
+        },
+        {
+          category: "Mobile App",
+          title: "LifeHelper Global",
+          image: "/images/home/lifehelper-global.png",
+          result:
+            "A multilingual mobile app designed to help newcomers navigate daily life, documents, communication, and essential local tasks more confidently.",
+        },
+        {
+          category: "Mobile App",
+          title: "Kids Bedtime Stories",
+          image: "/images/home/kids-bedtime-stories.png",
+          result: "A children’s mobile app focused on bedtime stories and a calm, engaging reading experience for families.",
         },
       ],
     },
@@ -390,6 +411,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           summary:
             "QR-меню, цифрові сценарії замовлення та зручні платіжні рішення для ресторанів і кафе.",
         },
+        {
+          title: "Мобільні додатки",
+          summary:
+            "Індивідуальна розробка та дизайн мобільних додатків для бізнесу, якому потрібні сильні цифрові продукти, зручні сценарії користування та краща взаємодія з клієнтами.",
+        },
       ],
     },
     work: {
@@ -399,14 +425,29 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       imageAltSuffix: "превʼю кейсу",
       items: [
         {
+          category: "Сайт",
           title: "QWave Hospitality",
           image: "/images/home/case-qwave.png",
           result: "Точніше позиціонування та кращий потік заявок для готельного закупівельного сегмента.",
         },
         {
+          category: "Сайт",
           title: "RosPro Engineering",
           image: "/images/home/case-rospro.png",
           result: "Чітка архітектура послуг і маршрутизація заявок для технічних клієнтів.",
+        },
+        {
+          category: "Мобільний додаток",
+          title: "LifeHelper Global",
+          image: "/images/home/lifehelper-global.png",
+          result:
+            "Багатомовний мобільний додаток, створений для допомоги новоприбулим у щоденних справах, документах, комунікації та важливих локальних питаннях.",
+        },
+        {
+          category: "Мобільний додаток",
+          title: "Kids Bedtime Stories",
+          image: "/images/home/kids-bedtime-stories.png",
+          result: "Дитячий мобільний додаток з казками на ніч і спокійним, приємним форматом читання для сімей.",
         },
       ],
     },
@@ -606,6 +647,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           summary:
             "QR-меню, цифровые сценарии заказа и удобные платёжные решения для ресторанов и кафе.",
         },
+        {
+          title: "Мобильные приложения",
+          summary:
+            "Индивидуальная разработка и дизайн мобильных приложений для бизнеса, которому нужны сильные цифровые продукты, удобные пользовательские сценарии и лучшее взаимодействие с клиентами.",
+        },
       ],
     },
     work: {
@@ -615,14 +661,29 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       imageAltSuffix: "превью кейса",
       items: [
         {
+          category: "Сайт",
           title: "QWave Hospitality",
           image: "/images/home/case-qwave.png",
           result: "Более точное позиционирование и сильнее поток заявок для гостиничного закупочного сегмента.",
         },
         {
+          category: "Сайт",
           title: "RosPro Engineering",
           image: "/images/home/case-rospro.png",
           result: "Более понятная архитектура услуг и маршрутизация лидов для технических клиентов.",
+        },
+        {
+          category: "Мобильное приложение",
+          title: "LifeHelper Global",
+          image: "/images/home/lifehelper-global.png",
+          result:
+            "Многоязычное мобильное приложение, созданное для помощи новичкам в ежедневных задачах, документах, коммуникации и важных локальных вопросах.",
+        },
+        {
+          category: "Мобильное приложение",
+          title: "Kids Bedtime Stories",
+          image: "/images/home/kids-bedtime-stories.png",
+          result: "Детское мобильное приложение со сказками на ночь и спокойным, приятным форматом чтения для семей.",
         },
       ],
     },

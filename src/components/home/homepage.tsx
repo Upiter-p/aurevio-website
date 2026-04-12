@@ -91,6 +91,7 @@ function WorkCard({
         </div>
       </div>
       <div className="space-y-2.5 p-6">
+        <p className="text-[0.66rem] font-semibold uppercase tracking-[0.15em] text-[var(--text-muted)]">{work.category}</p>
         <h3 className="text-[1.28rem] font-semibold tracking-[-0.015em] text-[var(--text-main)]">{work.title}</h3>
         <p className="text-[0.97rem] leading-7 text-[var(--text-muted)]">{work.result}</p>
       </div>
