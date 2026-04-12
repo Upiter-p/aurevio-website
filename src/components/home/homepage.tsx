@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { QuickHelpWidget } from "@/components/home/quick-help-widget";
 import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from "@/components/home/translations";
 
@@ -94,6 +95,58 @@ function WorkCard({
         <p className="text-[0.97rem] leading-7 text-[var(--text-muted)]">{work.result}</p>
       </div>
     </article>
+  );
+}
+
+type MobileMenuOverlayProps = {
+  open: boolean;
+  close: () => void;
+  copy: HomeTranslations;
+  lang: Locale;
+};
+
+function MobileMenuOverlay({ open, close, copy, lang }: MobileMenuOverlayProps) {
+  if (!open || typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[1200] md:hidden">
+      <button
+        type="button"
+        onClick={close}
+        className="absolute inset-0 bg-black/72"
+        aria-label={copy.nav.menu}
+      />
+      <div className="absolute right-3 top-[calc(env(safe-area-inset-top)+0.75rem)] w-[min(300px,calc(100vw-1.5rem))] max-h-[72svh] overflow-y-auto overscroll-contain rounded-xl border border-white/20 bg-[#0f1622] p-3.5 shadow-[0_28px_56px_-28px_rgba(0,0,0,0.92)]">
+        <nav className="flex flex-col gap-1.5 text-sm font-medium text-white">
+          <a href="#solutions" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+            {copy.nav.services}
+          </a>
+          <a href="#work" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+            {copy.nav.work}
+          </a>
+          <a href="#smart-help" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+            {copy.nav.process}
+          </a>
+          <a href="#packages" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+            {copy.nav.pricing}
+          </a>
+          <a href="#contact" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+            {copy.nav.contact}
+          </a>
+        </nav>
+        <div className="mt-3 border-t border-white/15 pt-3">
+          <LanguageSwitcher lang={lang} ariaLabel={copy.nav.languageSwitcherAriaLabel} compact onDark />
+          <a
+            href="#contact"
+            onClick={close}
+            className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-md bg-[linear-gradient(180deg,#3c659e_0%,#2a4770_100%)] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white"
+          >
+            {copy.nav.bookCall}
+          </a>
+        </div>
+      </div>
+    </div>,
+    document.body
   );
 }
 
@@ -198,49 +251,11 @@ export function HomePage() {
             <button
               type="button"
               onClick={() => (isMobileMenuOpen ? closeMobileMenu() : openMobileMenu())}
+              aria-expanded={isMobileMenuOpen}
               className="rounded-md border border-white/25 bg-black/35 px-3 py-1.5 text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-white"
             >
               {copy.nav.menu}
             </button>
-            {isMobileMenuOpen ? (
-              <div className="fixed inset-0 z-[120]">
-                <button
-                  type="button"
-                  onClick={closeMobileMenu}
-                  className="absolute inset-0 bg-black/55 backdrop-blur-[1px]"
-                  aria-label={copy.nav.menu}
-                />
-                <div className="absolute right-3 top-[calc(env(safe-area-inset-top)+0.75rem)] w-[min(290px,calc(100vw-1.5rem))] max-h-[72svh] overflow-y-auto overscroll-contain rounded-xl border border-white/20 bg-[#111821]/95 p-3.5 shadow-[0_24px_50px_-34px_rgba(0,0,0,0.85)] backdrop-blur">
-                  <nav className="flex flex-col gap-1.5 text-sm font-medium text-white">
-                    <a href="#solutions" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                      {copy.nav.services}
-                    </a>
-                    <a href="#work" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                      {copy.nav.work}
-                    </a>
-                    <a href="#smart-help" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                      {copy.nav.process}
-                    </a>
-                    <a href="#packages" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                      {copy.nav.pricing}
-                    </a>
-                    <a href="#contact" onClick={closeMobileMenu} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-                      {copy.nav.contact}
-                    </a>
-                  </nav>
-                  <div className="mt-2.5 border-t border-white/15 pt-2.5">
-                    <LanguageSwitcher lang={lang} ariaLabel={copy.nav.languageSwitcherAriaLabel} compact onDark />
-                    <a
-                      href="#contact"
-                      onClick={closeMobileMenu}
-                      className="mt-3 inline-flex min-h-10 w-full items-center justify-center rounded-md bg-[linear-gradient(180deg,#3c659e_0%,#2a4770_100%)] px-4 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white"
-                    >
-                      {copy.nav.bookCall}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ) : null}
           </div>
         </header>
 
@@ -435,6 +450,7 @@ export function HomePage() {
         </div>
       </footer>
 
+      <MobileMenuOverlay open={isMobileMenuOpen} close={closeMobileMenu} copy={copy} lang={lang} />
       <QuickHelpWidget key={lang} copy={copy.quickHelp} contact={copy.contact} />
     </div>
   );
