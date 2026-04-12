@@ -124,9 +124,6 @@ function MobileMenuOverlay({ open, close, copy, lang }: MobileMenuOverlayProps) 
           <a href="#work" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
             {copy.nav.work}
           </a>
-          <a href="#smart-help" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
-            {copy.nav.process}
-          </a>
           <a href="#packages" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
             {copy.nav.pricing}
           </a>
@@ -228,9 +225,6 @@ export function HomePage() {
               <a href="#work" className="hover:text-white">
                 {copy.nav.work}
               </a>
-              <a href="#smart-help" className="hover:text-white">
-                {copy.nav.process}
-              </a>
               <a href="#packages" className="hover:text-white">
                 {copy.nav.pricing}
               </a>
@@ -320,10 +314,14 @@ export function HomePage() {
           </header>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {copy.solutions.items.map((item) => (
+            {copy.solutions.items.map((item, index) => (
               <article
                 key={item.title}
-                className="rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_18px_40px_-35px_rgba(14,19,28,0.7)]"
+                className={`rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_18px_40px_-35px_rgba(14,19,28,0.7)] ${
+                  copy.solutions.items.length % 3 === 1 && index === copy.solutions.items.length - 1
+                    ? "lg:col-start-2"
+                    : ""
+                }`}
               >
                 <h3 className="text-[1.12rem] font-semibold tracking-[-0.012em] text-[var(--text-main)]">{item.title}</h3>
                 <p className="mt-2 text-[0.94rem] leading-7 text-[var(--text-muted)]">{item.summary}</p>

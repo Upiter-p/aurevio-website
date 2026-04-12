@@ -34,7 +34,6 @@ export type HomeTranslations = {
   nav: {
     services: string;
     work: string;
-    process: string;
     pricing: string;
     contact: string;
     bookCall: string;
@@ -125,7 +124,6 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     nav: {
       services: "Services",
       work: "Work",
-      process: "Process",
       pricing: "Pricing",
       contact: "Contact",
       bookCall: "Book Call",
@@ -170,6 +168,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         {
           title: "AI Lead Handling",
           summary: "Smart follow-up and CRM automation to capture and qualify leads faster.",
+        },
+        {
+          title: "QR Menus & Restaurant Payments",
+          summary:
+            "QR-based menu systems, digital ordering flows, and seamless payment experiences for restaurants and cafes.",
         },
       ],
     },
@@ -337,7 +340,6 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     nav: {
       services: "Послуги",
       work: "Роботи",
-      process: "Процес",
       pricing: "Ціни",
       contact: "Контакт",
       bookCall: "Замовити дзвінок",
@@ -382,6 +384,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         {
           title: "AI-обробка лідів",
           summary: "Розумний фолоу-ап і CRM-автоматизація для швидшої кваліфікації лідів.",
+        },
+        {
+          title: "QR-меню та оплати для ресторанів",
+          summary:
+            "QR-меню, цифрові сценарії замовлення та зручні платіжні рішення для ресторанів і кафе.",
         },
       ],
     },
@@ -549,7 +556,6 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     nav: {
       services: "Услуги",
       work: "Работы",
-      process: "Процесс",
       pricing: "Цены",
       contact: "Контакт",
       bookCall: "Заказать звонок",
@@ -594,6 +600,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         {
           title: "AI-обработка лидов",
           summary: "Умный фоллоу-ап и CRM-автоматизация для быстрого захвата и квалификации лидов.",
+        },
+        {
+          title: "QR-меню и оплаты для ресторанов",
+          summary:
+            "QR-меню, цифровые сценарии заказа и удобные платёжные решения для ресторанов и кафе.",
         },
       ],
     },
