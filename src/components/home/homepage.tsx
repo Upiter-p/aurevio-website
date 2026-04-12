@@ -339,10 +339,17 @@ export function HomePage() {
             </h2>
           </header>
 
-          <div className="grid gap-5 lg:grid-cols-2">
-            {copy.work.items.map((work) => (
-              <WorkCard key={work.title} work={work} imageAltSuffix={copy.work.imageAltSuffix} />
-            ))}
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-8 bg-gradient-to-r from-[var(--bg-main)] to-transparent lg:block" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-8 bg-gradient-to-l from-[var(--bg-main)] to-transparent lg:block" />
+
+            <div className="flex touch-pan-x snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {copy.work.items.map((work) => (
+                <div key={work.title} className="min-w-0 shrink-0 basis-full snap-start lg:basis-[calc(50%-0.625rem)]">
+                  <WorkCard work={work} imageAltSuffix={copy.work.imageAltSuffix} />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
