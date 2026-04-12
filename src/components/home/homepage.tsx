@@ -438,23 +438,24 @@ export function HomePage() {
           </div>
         </section>
 
-        <section id="testimonials" className="mt-12 space-y-6">
+        <section id="highlights" className="mt-12 space-y-6">
           <header className="space-y-2">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
-              {copy.testimonials.eyebrow}
+              {copy.highlights.eyebrow}
             </p>
             <h2 className="text-[1.8rem] font-semibold leading-[1.12] tracking-[-0.02em] text-[var(--text-main)] sm:text-[2.3rem]">
-              {copy.testimonials.title}
+              {copy.highlights.title}
             </h2>
           </header>
 
           <div className="grid gap-4 lg:grid-cols-3">
-            {copy.testimonials.items.map((item) => (
+            {copy.highlights.items.map((item) => (
               <article
-                key={item}
+                key={item.title}
                 className="rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_16px_36px_-30px_rgba(14,19,28,0.75)]"
               >
-                <p className="text-[0.98rem] leading-7 text-[var(--text-main)]">{item}</p>
+                <h3 className="text-[1.05rem] font-semibold tracking-[-0.012em] text-[var(--text-main)]">{item.title}</h3>
+                <p className="mt-2 text-[0.95rem] leading-7 text-[var(--text-muted)]">{item.text}</p>
               </article>
             ))}
           </div>

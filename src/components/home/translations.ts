@@ -72,10 +72,13 @@ export type HomeTranslations = {
       result: string;
     }>;
   };
-  testimonials: {
+  highlights: {
     eyebrow: string;
     title: string;
-    items: string[];
+    items: Array<{
+      title: string;
+      text: string;
+    }>;
   };
   industries: {
     eyebrow: string;
@@ -224,13 +227,22 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         },
       ],
     },
-    testimonials: {
-      eyebrow: "Client feedback",
-      title: "What clients value",
+    highlights: {
+      eyebrow: "Results",
+      title: "Case Highlights",
       items: [
-        "“Clear structure, stronger positioning, and a much more professional digital presence.”",
-        "“Fast communication, thoughtful execution, and a result that feels premium.”",
-        "“More clarity, better presentation, and a website that feels built for real enquiries.”",
+        {
+          title: "Clearer positioning",
+          text: "Sharper messaging and stronger structure for businesses that need clearer market presentation.",
+        },
+        {
+          title: "Better lead flow",
+          text: "Websites and digital systems designed to turn more attention into qualified enquiries.",
+        },
+        {
+          title: "Stronger digital presence",
+          text: "Premium execution that helps businesses look more credible, modern, and ready to grow.",
+        },
       ],
     },
     industries: {
@@ -471,13 +483,22 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         },
       ],
     },
-    testimonials: {
-      eyebrow: "Відгуки",
-      title: "Що цінують клієнти",
+    highlights: {
+      eyebrow: "Результати",
+      title: "Ключові результати",
       items: [
-        "«Чітка структура, сильніше позиціонування і набагато професійніша цифрова присутність.»",
-        "«Швидка комунікація, продумане виконання і результат, який виглядає преміально.»",
-        "«Більше ясності, краща подача і сайт, який справді працює на звернення.»",
+        {
+          title: "Чіткіше позиціонування",
+          text: "Сильніші повідомлення і краща структура для бізнесу, якому потрібна зрозуміліша ринкова подача.",
+        },
+        {
+          title: "Кращий потік звернень",
+          text: "Сайти та цифрові системи, створені для перетворення більшої уваги у якісні запити.",
+        },
+        {
+          title: "Сильніша цифрова присутність",
+          text: "Преміальне виконання, яке допомагає бізнесу виглядати переконливіше, сучасніше і готовим до зростання.",
+        },
       ],
     },
     industries: {
@@ -718,13 +739,22 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         },
       ],
     },
-    testimonials: {
-      eyebrow: "Отзывы",
-      title: "Что ценят клиенты",
+    highlights: {
+      eyebrow: "Результаты",
+      title: "Ключевые результаты",
       items: [
-        "«Чёткая структура, более сильное позиционирование и гораздо более профессиональное цифровое присутствие.»",
-        "«Быстрая коммуникация, продуманная реализация и результат, который выглядит премиально.»",
-        "«Больше ясности, лучшая подача и сайт, который действительно работает на обращения.»",
+        {
+          title: "Более чёткое позиционирование",
+          text: "Сильные сообщения и лучшая структура для бизнеса, которому нужна более понятная рыночная подача.",
+        },
+        {
+          title: "Лучший поток обращений",
+          text: "Сайты и цифровые системы, созданные для превращения большего внимания в качественные запросы.",
+        },
+        {
+          title: "Более сильное цифровое присутствие",
+          text: "Премиальная реализация, которая помогает бизнесу выглядеть убедительнее, современнее и готовым к росту.",
+        },
       ],
     },
     industries: {
