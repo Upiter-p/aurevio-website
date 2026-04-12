@@ -438,7 +438,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="mt-12 space-y-6">
+        <section id="testimonials" className="mt-12 space-y-6">
           <header className="space-y-2">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
               {copy.testimonials.eyebrow}

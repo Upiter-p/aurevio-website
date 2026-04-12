@@ -223,7 +223,7 @@ export function QuickHelpWidget({
         </>
       ) : null}
 
-      <div className="fixed bottom-5 right-2 z-[90] w-[min(360px,calc(100vw-1rem))] sm:bottom-6 sm:right-3 sm:w-[360px]">
+      <div className="fixed bottom-10 right-2 z-[90] w-[min(360px,calc(100vw-1rem))] sm:bottom-12 sm:right-3 sm:w-[360px]">
         {isOpen ? (
           <section className="mb-3 hidden overflow-hidden rounded-xl border border-[var(--line-soft)] bg-[var(--surface-main)] shadow-[0_28px_58px_-34px_rgba(14,19,28,0.85)] sm:block">
             <header className="border-b border-[var(--line-soft)] px-4 py-3 sm:px-5">
