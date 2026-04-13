@@ -9,7 +9,7 @@ import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from
 
 type WorkItem = HomeTranslations["work"]["items"][number];
 type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
-const OVERLAY_EVENT = "aurevio:overlay-change";
+const OVERLAY_EVENT = "aureviopro:overlay-change";
 
 type LanguageSwitcherProps = {
   lang: Locale;

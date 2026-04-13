@@ -5,7 +5,7 @@ import type { HomeTranslations, QuestionKey, QuickHelpTranslations } from "@/com
 
 type Answers = Record<QuestionKey, string>;
 type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
-const OVERLAY_EVENT = "aurevio:overlay-change";
+const OVERLAY_EVENT = "aureviopro:overlay-change";
 
 function createInitialAnswers(): Answers {
   return {

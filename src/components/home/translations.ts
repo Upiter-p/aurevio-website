@@ -126,11 +126,11 @@ export type HomeTranslations = {
 
 export const homeTranslations: Record<Locale, HomeTranslations> = {
   en: {
-    brand: "Aurevio",
+    brand: "AurevioPro",
     contact: {
       email: "aureviodig@gmail.com",
       whatsappNumber: "447388772715",
-      strategyCallSubject: "Aurevio Strategy Call",
+      strategyCallSubject: "AurevioPro Strategy Call",
     },
     nav: {
       services: "Services",
@@ -148,7 +148,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         "We build premium websites, landing pages, paid campaigns, and lead-handling systems that help businesses attract better leads and convert more attention into action.",
       primaryCta: "Book Strategy Call",
       secondaryCta: "View Work",
-      visualAlt: "Aurevio digital growth workspace",
+      visualAlt: "AurevioPro digital growth workspace",
     },
     capabilities: ["Websites", "SEO", "Paid Ads", "Automation"],
     solutions: {
@@ -263,7 +263,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       description:
         "Visitors answer a few quick questions and get the right service path while your team captures warm intent instantly.",
       cta: "Enable Smart Intake",
-      assistantLabel: "Aurevio Assistant",
+      assistantLabel: "AurevioPro Assistant",
       assistantQuestion: "What do you need most right now?",
       assistantOptions: ["More enquiries", "Better lead quality", "Scale paid campaigns", "Automate follow-up"],
       suggestedPathLabel: "Suggested Path",
@@ -331,7 +331,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       ],
     },
     finalCta: {
-      title: "Build your next growth system with Aurevio.",
+      title: "Build your next growth system with AurevioPro.",
       subtitle: "Built to turn attention into qualified enquiries.",
       primaryCta: "Book Strategy Call",
       secondaryCta: "Message on WhatsApp",
@@ -344,7 +344,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       button: "Quick Help",
       title: "Find the right starting point",
       enquiryLabel: "Quick Help",
-      mailSubject: "Aurevio Enquiry",
+      mailSubject: "AurevioPro Enquiry",
       questions: [
         {
           key: "service",
@@ -382,11 +382,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     },
   },
   ua: {
-    brand: "Aurevio",
+    brand: "AurevioPro",
     contact: {
       email: "aureviodig@gmail.com",
       whatsappNumber: "447388772715",
-      strategyCallSubject: "Стратегічний дзвінок Aurevio",
+      strategyCallSubject: "Стратегічний дзвінок AurevioPro",
     },
     nav: {
       services: "Послуги",
@@ -404,7 +404,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         "Ми створюємо преміальні сайти, цільові сторінки, рекламні кампанії та системи обробки лідів, які допомагають залучати кращих клієнтів і перетворювати увагу в дію.",
       primaryCta: "Замовити стратегічний дзвінок",
       secondaryCta: "Переглянути роботи",
-      visualAlt: "Робочий простір Aurevio для цифрового зростання",
+      visualAlt: "Робочий простір AurevioPro для цифрового зростання",
     },
     capabilities: ["Сайти", "SEO", "Платна реклама", "Автоматизація"],
     solutions: {
@@ -519,7 +519,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       description:
         "Відвідувачі відповідають на кілька запитань і одразу отримують правильний шлях послуги, а команда фіксує теплий попит.",
       cta: "Увімкнути Smart Intake",
-      assistantLabel: "Помічник Aurevio",
+      assistantLabel: "Помічник AurevioPro",
       assistantQuestion: "Що для вас найважливіше зараз?",
       assistantOptions: ["Більше заявок", "Краща якість лідів", "Масштабувати рекламу", "Автоматизувати фолоу-ап"],
       suggestedPathLabel: "Рекомендований шлях",
@@ -587,7 +587,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       ],
     },
     finalCta: {
-      title: "Побудуйте вашу наступну систему зростання з Aurevio.",
+      title: "Побудуйте вашу наступну систему зростання з AurevioPro.",
       subtitle: "Створено, щоб перетворювати увагу на якісні звернення.",
       primaryCta: "Замовити стратегічний дзвінок",
       secondaryCta: "Написати у WhatsApp",
@@ -600,7 +600,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       button: "Швидка допомога",
       title: "Знайдіть правильний старт для вашого проєкту",
       enquiryLabel: "Швидка допомога",
-      mailSubject: "Запит до Aurevio",
+      mailSubject: "Запит до AurevioPro",
       questions: [
         {
           key: "service",
@@ -638,11 +638,11 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     },
   },
   ru: {
-    brand: "Aurevio",
+    brand: "AurevioPro",
     contact: {
       email: "aureviodig@gmail.com",
       whatsappNumber: "447388772715",
-      strategyCallSubject: "Стратегический звонок Aurevio",
+      strategyCallSubject: "Стратегический звонок AurevioPro",
     },
     nav: {
       services: "Услуги",
@@ -660,7 +660,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         "Мы создаём премиальные сайты, лендинги, рекламные кампании и системы обработки лидов, которые помогают привлекать лучших клиентов и превращать внимание в действие.",
       primaryCta: "Заказать стратегический звонок",
       secondaryCta: "Посмотреть работы",
-      visualAlt: "Рабочее пространство Aurevio для цифрового роста",
+      visualAlt: "Рабочее пространство AurevioPro для цифрового роста",
     },
     capabilities: ["Сайты", "SEO", "Платная реклама", "Автоматизация"],
     solutions: {
@@ -775,7 +775,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       description:
         "Посетители отвечают на несколько коротких вопросов и сразу получают подходящий путь услуги, а команда фиксирует тёплый спрос.",
       cta: "Включить Smart Intake",
-      assistantLabel: "Ассистент Aurevio",
+      assistantLabel: "Ассистент AurevioPro",
       assistantQuestion: "Что вам сейчас важнее всего?",
       assistantOptions: ["Больше заявок", "Лучшее качество лидов", "Масштабировать рекламу", "Автоматизировать фоллоу-ап"],
       suggestedPathLabel: "Рекомендованный путь",
@@ -843,7 +843,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       ],
     },
     finalCta: {
-      title: "Постройте вашу следующую систему роста вместе с Aurevio.",
+      title: "Постройте вашу следующую систему роста вместе с AurevioPro.",
       subtitle: "Создано, чтобы превращать внимание в качественные заявки.",
       primaryCta: "Заказать стратегический звонок",
       secondaryCta: "Написать в WhatsApp",
@@ -856,7 +856,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       button: "Быстрая помощь",
       title: "Найдите правильный старт для вашего проекта",
       enquiryLabel: "Быстрая помощь",
-      mailSubject: "Запрос в Aurevio",
+      mailSubject: "Запрос в AurevioPro",
       questions: [
         {
           key: "service",
