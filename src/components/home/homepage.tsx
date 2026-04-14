@@ -72,7 +72,7 @@ function WorkCard({
   imageAltSuffix: string;
 }) {
   return (
-    <article className="group overflow-hidden rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] shadow-[0_22px_50px_-38px_rgba(14,19,28,0.82)]">
+    <article className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] shadow-[0_22px_50px_-38px_rgba(14,19,28,0.82)]">
       <div className="relative aspect-[16/10] overflow-hidden border-b border-[var(--line-soft)] bg-[var(--surface-subtle)] p-3 sm:p-4">
         <div className="relative h-full w-full overflow-hidden rounded-lg border border-[var(--line-soft)] bg-white/90">
           <div className="absolute inset-x-0 top-0 h-8 border-b border-[var(--line-soft)] bg-[var(--surface-subtle)]" />
@@ -90,10 +90,10 @@ function WorkCard({
           />
         </div>
       </div>
-      <div className="space-y-2.5 p-6">
+      <div className="flex flex-1 flex-col space-y-2.5 p-6">
         <p className="text-[0.66rem] font-semibold uppercase tracking-[0.15em] text-[var(--text-muted)]">{work.category}</p>
         <h3 className="text-[1.28rem] font-semibold tracking-[-0.015em] text-[var(--text-main)]">{work.title}</h3>
-        <p className="text-[0.97rem] leading-7 text-[var(--text-muted)]">{work.result}</p>
+        <p className="h-[5.25rem] overflow-hidden text-[0.97rem] leading-7 text-[var(--text-muted)]">{work.result}</p>
       </div>
     </article>
   );
@@ -153,7 +153,8 @@ export function HomePage() {
   const { locale: lang, copy } = getHomeTranslations(searchParams.get("lang"));
   const hasHeroImage = true;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeWorkSlide, setActiveWorkSlide] = useState(0);
+  const [workSlideState, setWorkSlideState] = useState<{ lang: Locale; index: number }>({ lang, index: 0 });
+  const activeWorkSlide = workSlideState.lang === lang ? workSlideState.index : 0;
   const workScrollerRef = useRef<HTMLDivElement | null>(null);
   const strategyCallHref = `mailto:${copy.contact.email}?subject=${encodeURIComponent(copy.contact.strategyCallSubject)}`;
   const whatsappHref = `https://wa.me/${copy.contact.whatsappNumber}`;
@@ -196,10 +197,6 @@ export function HomePage() {
     };
   }, [isMobileMenuOpen]);
 
-  useEffect(() => {
-    setActiveWorkSlide(0);
-  }, [lang]);
-
   function getWorkSlideWidth() {
     const scroller = workScrollerRef.current;
     if (!scroller) return 0;
@@ -220,7 +217,7 @@ export function HomePage() {
     if (slideWidth <= 0) return;
 
     const nextIndex = Math.round(scroller.scrollLeft / slideWidth);
-    setActiveWorkSlide(Math.max(0, Math.min(copy.work.items.length - 1, nextIndex)));
+    setWorkSlideState({ lang, index: Math.max(0, Math.min(copy.work.items.length - 1, nextIndex)) });
   }
 
   function scrollWork(direction: -1 | 1) {
@@ -404,7 +401,7 @@ export function HomePage() {
             <div
               ref={workScrollerRef}
               onScroll={updateActiveWorkSlide}
-              className="flex touch-pan-x snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 pr-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="flex touch-pan-x snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 pr-4 lg:gap-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {copy.work.items.map((work) => (
                 <div
