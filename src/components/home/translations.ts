@@ -53,6 +53,7 @@ export type HomeTranslations = {
     eyebrow: string;
     title: string;
     cta: string;
+    cardCta: string;
     items: Array<{
       title: string;
       summary: string;
@@ -155,6 +156,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       eyebrow: "Solutions",
       title: "Modular growth capabilities.",
       cta: "Get Recommendation",
+      cardCta: "Learn more",
       items: [
         {
           title: "Business Websites",
@@ -169,26 +171,22 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           summary: "Structured service and location SEO designed for durable growth.",
         },
         {
-          title: "Google Ads / PPC",
-          summary: "Intent-driven campaigns for high-value demand and measurable ROI.",
+          title: "AI Agents",
+          summary: "Business AI agents for lead qualification, follow-up, and practical automation.",
         },
         {
-          title: "Meta Ads",
-          summary: "Targeted social campaigns that move prospects into your pipeline.",
+          title: "Business Automation",
+          summary: "Workflow systems for lead routing, CRM handoff, and cleaner follow-up.",
         },
         {
-          title: "AI Lead Handling",
-          summary: "Smart follow-up and CRM automation to capture and qualify leads faster.",
+          title: "Mobile Apps",
+          summary:
+            "Custom mobile app design and development for stronger products, user flows, and customer engagement.",
         },
         {
           title: "QR Menus & Restaurant Payments",
           summary:
             "QR-based menu systems, digital ordering flows, and seamless payment experiences for restaurants and cafes.",
-        },
-        {
-          title: "Mobile Apps",
-          summary:
-            "Custom mobile app design and development for businesses that need stronger digital products, user flows, and customer engagement.",
         },
       ],
     },
@@ -411,6 +409,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       eyebrow: "Рішення",
       title: "Модульні можливості для зростання.",
       cta: "Отримати рекомендацію",
+      cardCta: "Дізнатися більше",
       items: [
         {
           title: "Бізнес-сайти",
@@ -425,26 +424,22 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           summary: "Структуроване SEO для послуг і локацій з акцентом на довгостроковий результат.",
         },
         {
-          title: "Google Ads / PPC",
-          summary: "Кампанії за наміром, що приносять якісний попит і вимірювану окупність.",
+          title: "AI-агенти",
+          summary: "Бізнес AI-агенти для кваліфікації лідів, фолоу-апу та практичної автоматизації.",
         },
         {
-          title: "Meta Ads",
-          summary: "Точні соціальні кампанії, які переводять увагу клієнтів у ваш воронковий потік.",
+          title: "Автоматизація бізнесу",
+          summary: "Workflow-системи для маршрутизації лідів, передачі в CRM і чистішого фолоу-апу.",
         },
         {
-          title: "AI-обробка лідів",
-          summary: "Розумний фолоу-ап і CRM-автоматизація для швидшої кваліфікації лідів.",
+          title: "Мобільні додатки",
+          summary:
+            "Індивідуальний дизайн і розробка мобільних додатків для сильніших продуктів, сценаріїв та взаємодії з клієнтами.",
         },
         {
           title: "QR-меню та оплати для ресторанів",
           summary:
             "QR-меню, цифрові сценарії замовлення та зручні платіжні рішення для ресторанів і кафе.",
-        },
-        {
-          title: "Мобільні додатки",
-          summary:
-            "Індивідуальна розробка та дизайн мобільних додатків для бізнесу, якому потрібні сильні цифрові продукти, зручні сценарії користування та краща взаємодія з клієнтами.",
         },
       ],
     },
@@ -667,6 +662,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       eyebrow: "Решения",
       title: "Модульные возможности для роста.",
       cta: "Получить рекомендацию",
+      cardCta: "Узнать больше",
       items: [
         {
           title: "Бизнес-сайты",
@@ -681,26 +677,22 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
           summary: "Структурированное SEO для услуг и локаций с фокусом на долгосрочный рост.",
         },
         {
-          title: "Google Ads / PPC",
-          summary: "Кампании по намерению, которые дают качественный спрос и измеримый ROI.",
+          title: "AI-агенты",
+          summary: "Бизнес AI-агенты для квалификации лидов, follow-up и практической автоматизации.",
         },
         {
-          title: "Meta Ads",
-          summary: "Точные социальные кампании, переводящие внимание в реальный поток лидов.",
+          title: "Автоматизация бизнеса",
+          summary: "Workflow-системы для маршрутизации лидов, передачи в CRM и более чистого follow-up.",
         },
         {
-          title: "AI-обработка лидов",
-          summary: "Умный фоллоу-ап и CRM-автоматизация для быстрого захвата и квалификации лидов.",
+          title: "Мобильные приложения",
+          summary:
+            "Индивидуальный дизайн и разработка мобильных приложений для более сильных продуктов, сценариев и взаимодействия с клиентами.",
         },
         {
           title: "QR-меню и оплаты для ресторанов",
           summary:
             "QR-меню, цифровые сценарии заказа и удобные платёжные решения для ресторанов и кафе.",
-        },
-        {
-          title: "Мобильные приложения",
-          summary:
-            "Индивидуальная разработка и дизайн мобильных приложений для бизнеса, которому нужны сильные цифровые продукты, удобные пользовательские сценарии и лучшее взаимодействие с клиентами.",
         },
       ],
     },

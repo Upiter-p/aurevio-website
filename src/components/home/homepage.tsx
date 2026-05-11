@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -10,6 +11,24 @@ import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from
 type WorkItem = HomeTranslations["work"]["items"][number];
 type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
 const OVERLAY_EVENT = "aureviopro:overlay-change";
+const capabilityLinksByIndex = ["/services/website-design", "/services/seo-landing-pages", null, "/services/business-automation"];
+const solutionLinksByIndex = [
+  "/services/website-design",
+  "/services/lead-generation-websites",
+  "/services/seo-landing-pages",
+  "/services/ai-agents",
+  "/services/business-automation",
+  "/services/mobile-apps",
+  "/services/qr-menu-restaurant-payments",
+];
+
+function localizeHref(href: string, lang: Locale) {
+  if (lang === "en") return href;
+
+  const [path, hash = ""] = href.split("#");
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}lang=${lang}${hash ? `#${hash}` : ""}`;
+}
 
 type LanguageSwitcherProps = {
   lang: Locale;
@@ -119,13 +138,13 @@ function MobileMenuOverlay({ open, close, copy, lang }: MobileMenuOverlayProps) 
       />
       <div className="absolute right-3 top-[calc(env(safe-area-inset-top)+0.75rem)] w-[min(300px,calc(100vw-1.5rem))] max-h-[72svh] overflow-y-auto overscroll-contain rounded-xl border border-white/20 bg-[#0f1622] p-3.5 shadow-[0_28px_56px_-28px_rgba(0,0,0,0.92)]">
         <nav className="flex flex-col gap-1.5 text-sm font-medium text-white">
-          <a href="#solutions" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+          <a href="#services" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
             {copy.nav.services}
           </a>
           <a href="#work" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
             {copy.nav.work}
           </a>
-          <a href="#packages" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
+          <a href="#pricing" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
             {copy.nav.pricing}
           </a>
           <a href="#contact" onClick={close} className="rounded-lg px-2 py-1.5 hover:bg-white/10">
@@ -255,13 +274,13 @@ export function HomePage() {
 
           <div className="hidden items-center gap-6 md:flex">
             <nav className="flex items-center gap-6 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white/72">
-              <a href="#solutions" className="hover:text-white">
+              <a href="#services" className="hover:text-white">
                 {copy.nav.services}
               </a>
               <a href="#work" className="hover:text-white">
                 {copy.nav.work}
               </a>
-              <a href="#packages" className="hover:text-white">
+              <a href="#pricing" className="hover:text-white">
                 {copy.nav.pricing}
               </a>
               <a href="#contact" className="hover:text-white">
@@ -323,18 +342,24 @@ export function HomePage() {
       <main className="mx-auto w-full max-w-[1240px] px-4 pb-14 pt-5 sm:px-6 sm:pb-16 sm:pt-6 lg:px-10">
         <section className="mt-5 rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-4 sm:p-5">
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {copy.capabilities.map((item) => (
+            {copy.capabilities.map((item, index) => (
               <li
                 key={item}
                 className="rounded-xl border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-4 py-3 text-sm font-semibold tracking-[-0.01em] text-[var(--text-main)]"
               >
-                {item}
+                {capabilityLinksByIndex[index] ? (
+                  <Link href={localizeHref(capabilityLinksByIndex[index], lang)} className="block hover:text-[var(--accent)]">
+                    {item}
+                  </Link>
+                ) : (
+                  item
+                )}
               </li>
             ))}
           </ul>
         </section>
 
-        <section id="solutions" className="mt-12 space-y-6">
+        <section id="services" className="mt-12 space-y-6">
           <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="space-y-2">
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
@@ -350,19 +375,31 @@ export function HomePage() {
           </header>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {copy.solutions.items.map((item, index) => (
-              <article
-                key={item.title}
-                className={`rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_18px_40px_-35px_rgba(14,19,28,0.7)] ${
-                  copy.solutions.items.length % 3 === 1 && index === copy.solutions.items.length - 1
-                    ? "lg:col-start-2"
-                    : ""
-                }`}
-              >
-                <h3 className="text-[1.12rem] font-semibold tracking-[-0.012em] text-[var(--text-main)]">{item.title}</h3>
-                <p className="mt-2 text-[0.94rem] leading-7 text-[var(--text-muted)]">{item.summary}</p>
-              </article>
-            ))}
+            {copy.solutions.items.map((item, index) => {
+              const href = localizeHref(solutionLinksByIndex[index] ?? "/#contact", lang);
+
+              return (
+                <Link
+                  key={item.title}
+                  href={href}
+                  className={`group block rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_18px_40px_-35px_rgba(14,19,28,0.7)] transition hover:-translate-y-0.5 hover:border-[var(--line-strong)] ${
+                    copy.solutions.items.length % 3 === 1 && index === copy.solutions.items.length - 1
+                      ? "lg:col-start-2"
+                      : ""
+                  }`}
+                >
+                  <article>
+                    <h3 className="text-[1.12rem] font-semibold tracking-[-0.012em] text-[var(--text-main)]">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-[0.94rem] leading-7 text-[var(--text-muted)]">{item.summary}</p>
+                    <span className="mt-4 inline-flex text-sm font-semibold text-[var(--accent)] group-hover:underline">
+                      {copy.solutions.cardCta} <span aria-hidden>→</span>
+                    </span>
+                  </article>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
@@ -480,7 +517,7 @@ export function HomePage() {
           </ul>
         </section>
 
-        <section id="packages" className="mt-12 space-y-6">
+        <section id="pricing" className="mt-12 space-y-6">
           <header className="space-y-3">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
               {copy.packages.eyebrow}
