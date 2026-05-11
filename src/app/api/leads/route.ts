@@ -153,6 +153,27 @@ async function deliverWebhook(lead: ValidatedLead) {
     return { configured: false, ok: false };
   }
 
+  const webhookPayload = {
+    submittedAt: lead.submittedAt,
+    timestamp: lead.submittedAt,
+    source: lead.source,
+    locale: lead.locale,
+    pagePath: lead.pagePath,
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone,
+    company: lead.company,
+    service: lead.service,
+    package: lead.package,
+    message: lead.message,
+    intakeSummary: lead.intakeSummary,
+    conversation: lead.conversation,
+    consent: lead.consent,
+    deliveryStatus: "validated",
+    rawPayload: lead,
+    lead,
+  };
+
   try {
     const response = await fetch(webhookUrl, {
       method: "POST",
@@ -160,7 +181,7 @@ async function deliverWebhook(lead: ValidatedLead) {
         "content-type": "application/json",
         ...(token ? { authorization: `Bearer ${token}`, "x-webhook-token": token } : {}),
       },
-      body: JSON.stringify({ lead }),
+      body: JSON.stringify(webhookPayload),
     });
 
     return { configured: true, ok: response.ok, status: response.status };
