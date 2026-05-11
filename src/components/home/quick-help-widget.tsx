@@ -5,7 +5,13 @@ import type { HomeTranslations, QuestionKey, QuickHelpTranslations } from "@/com
 
 type Answers = Record<QuestionKey, string>;
 type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
+type OpenAssistantEventDetail = {
+  serviceSlug?: string;
+  locale?: string;
+  serviceTitle?: string;
+};
 const OVERLAY_EVENT = "aureviopro:overlay-change";
+const OPEN_ASSISTANT_EVENT = "aurevio:open-assistant";
 
 function createInitialAnswers(): Answers {
   return {
@@ -90,6 +96,21 @@ export function QuickHelpWidget({
 
     window.addEventListener(OVERLAY_EVENT, onOverlayChange as EventListener);
     return () => window.removeEventListener(OVERLAY_EVENT, onOverlayChange as EventListener);
+  }, []);
+
+  useEffect(() => {
+    const onOpenAssistant = (event: Event) => {
+      const detail = (event as CustomEvent<OpenAssistantEventDetail>).detail;
+      const serviceAnswer = detail?.serviceTitle || detail?.serviceSlug || "";
+
+      setAnswers({ ...createInitialAnswers(), service: serviceAnswer });
+      setStep(serviceAnswer ? 1 : 0);
+      emitQuickHelpOverlayChange(true);
+      setIsOpen(true);
+    };
+
+    window.addEventListener(OPEN_ASSISTANT_EVENT, onOpenAssistant as EventListener);
+    return () => window.removeEventListener(OPEN_ASSISTANT_EVENT, onOpenAssistant as EventListener);
   }, []);
 
   useEffect(() => {
