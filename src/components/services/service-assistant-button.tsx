@@ -7,8 +7,10 @@ type ServiceAssistantButtonProps = {
   className: string;
   fallbackHref: string;
   locale: string;
-  serviceSlug: string;
-  serviceTitle: string;
+  serviceSlug?: string;
+  serviceTitle?: string;
+  packageName?: string;
+  sourcePage?: string;
 };
 
 const OPEN_ASSISTANT_EVENT = "aurevio:open-assistant";
@@ -20,6 +22,8 @@ export function ServiceAssistantButton({
   locale,
   serviceSlug,
   serviceTitle,
+  packageName,
+  sourcePage,
 }: ServiceAssistantButtonProps) {
   return (
     <a
@@ -33,6 +37,8 @@ export function ServiceAssistantButton({
               serviceSlug,
               locale,
               serviceTitle,
+              packageName,
+              sourcePage,
             },
           })
         );

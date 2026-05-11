@@ -166,6 +166,7 @@ export function ServicePageView({ page, locale }: ServicePageViewProps) {
                   locale={locale}
                   serviceSlug={page.slug}
                   serviceTitle={heroTitle}
+                  sourcePage={`/services/${page.slug}`}
                   className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[linear-gradient(180deg,#3c659e_0%,#2a4770_100%)] px-6 text-sm font-semibold text-white shadow-[0_22px_40px_-24px_rgba(21,37,58,0.95)]"
                 >
                   {heroPrimaryLabel}
@@ -251,6 +252,7 @@ export function ServicePageView({ page, locale }: ServicePageViewProps) {
               locale={locale}
               serviceSlug={page.slug}
               serviceTitle={heroTitle}
+              sourcePage={`/services/${page.slug}`}
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent)] px-6 text-sm font-semibold text-white shadow-[0_18px_36px_-22px_rgba(33,54,89,0.82)]"
             >
               {content.cta.primaryLabel}
@@ -272,7 +274,7 @@ export function ServicePageView({ page, locale }: ServicePageViewProps) {
           </div>
         </section>
       </div>
-      <QuickHelpWidget copy={homeCopy.quickHelp} contact={homeCopy.contact} />
+      <QuickHelpWidget copy={homeCopy.quickHelp} contact={homeCopy.contact} locale={locale} />
     </main>
   );
 }

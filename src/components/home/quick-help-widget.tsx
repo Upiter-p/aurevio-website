@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import type { HomeTranslations, QuestionKey, QuickHelpTranslations } from "@/components/home/translations";
+import { submitLead } from "@/lib/lead-submit";
 
 type Answers = Record<QuestionKey, string>;
 type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
@@ -9,6 +10,15 @@ type OpenAssistantEventDetail = {
   serviceSlug?: string;
   locale?: string;
   serviceTitle?: string;
+  packageName?: string;
+  sourcePage?: string;
+};
+type AssistantContext = {
+  serviceSlug: string;
+  serviceTitle: string;
+  packageName: string;
+  sourcePage: string;
+  locale: string;
 };
 const OVERLAY_EVENT = "aureviopro:overlay-change";
 const OPEN_ASSISTANT_EVENT = "aurevio:open-assistant";
@@ -23,12 +33,67 @@ function createInitialAnswers(): Answers {
   };
 }
 
+function createInitialLeadForm() {
+  return {
+    name: "",
+    email: "",
+    phone: "",
+    consent: false,
+    honeypot: "",
+  };
+}
+
+function createInitialAssistantContext(): AssistantContext {
+  return {
+    serviceSlug: "",
+    serviceTitle: "",
+    packageName: "",
+    sourcePage: "",
+    locale: "",
+  };
+}
+
+const quickLeadCopy = {
+  en: {
+    name: "Name",
+    email: "Email",
+    phone: "Phone / WhatsApp",
+    consent: "I agree that AurevioPro can contact me about this enquiry.",
+    privacy: "We’ll use your details only to respond to this enquiry.",
+    sending: "Sending...",
+    success: "Thanks. Your enquiry was received.",
+    fallback: "Please use WhatsApp or email as a backup.",
+  },
+  ua: {
+    name: "Ім’я",
+    email: "Email",
+    phone: "Телефон / WhatsApp",
+    consent: "Я погоджуюся, що AurevioPro може зв’язатися зі мною щодо цього запиту.",
+    privacy: "Ми використаємо ваші дані лише для відповіді на цей запит.",
+    sending: "Надсилаємо...",
+    success: "Дякуємо. Ваш запит отримано.",
+    fallback: "Скористайтеся WhatsApp або email як резервним способом.",
+  },
+  ru: {
+    name: "Имя",
+    email: "Email",
+    phone: "Телефон / WhatsApp",
+    consent: "Я согласен, что AurevioPro может связаться со мной по этому запросу.",
+    privacy: "Мы используем ваши данные только для ответа на этот запрос.",
+    sending: "Отправляем...",
+    success: "Спасибо. Ваш запрос получен.",
+    fallback: "Используйте WhatsApp или email как резервный способ.",
+  },
+};
+
 export function QuickHelpWidget({
   copy,
   contact,
+  locale = "en",
 }: {
   copy: QuickHelpTranslations;
   contact: HomeTranslations["contact"];
+  locale?: "en" | "ua" | "ru";
 }) {
   const questions = copy.questions;
   const totalSteps = questions.length;
@@ -36,6 +101,13 @@ export function QuickHelpWidget({
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>(() => createInitialAnswers());
+  const [assistantContext, setAssistantContext] = useState<AssistantContext>(() => createInitialAssistantContext());
+  const [leadForm, setLeadForm] = useState(() => createInitialLeadForm());
+  const [submitState, setSubmitState] = useState<{
+    status: "idle" | "loading" | "success" | "error";
+    message: string;
+  }>({ status: "idle", message: "" });
+  const leadCopy = quickLeadCopy[locale];
 
   const isSummaryStep = step >= totalSteps;
   const currentQuestion = questions[Math.min(step, totalSteps - 1)];
@@ -44,16 +116,24 @@ export function QuickHelpWidget({
   const progress = Math.max(10, Math.round((completedCount / totalSteps) * 100));
 
   const enquiryBody = useMemo(() => {
+    const contextLines = [
+      assistantContext.serviceTitle ? `Service context: ${assistantContext.serviceTitle}` : "",
+      assistantContext.packageName ? `Package context: ${assistantContext.packageName}` : "",
+      assistantContext.sourcePage ? `Source page: ${assistantContext.sourcePage}` : "",
+    ].filter(Boolean);
+
     return [
       copy.enquiryLabel,
       "",
+      ...contextLines,
+      contextLines.length ? "" : "",
       `${questions[0].label} ${answers.service || "-"}`,
       `${questions[1].label} ${answers.region || "-"}`,
       `${questions[2].label} ${answers.budget || "-"}`,
       `${questions[3].label} ${answers.timeline || "-"}`,
       `${questions[4].label} ${answers.contact || "-"}`,
     ].join("\n");
-  }, [answers, copy.enquiryLabel, questions]);
+  }, [answers, assistantContext.packageName, assistantContext.serviceTitle, assistantContext.sourcePage, copy.enquiryLabel, questions]);
 
   const mailtoHref = `mailto:${contact.email}?subject=${encodeURIComponent(copy.mailSubject)}&body=${encodeURIComponent(
     enquiryBody
@@ -70,18 +150,54 @@ export function QuickHelpWidget({
   function resetWidgetState() {
     setStep(0);
     setAnswers(createInitialAnswers());
+    setLeadForm(createInitialLeadForm());
+    setSubmitState({ status: "idle", message: "" });
   }
 
   function closeWidget() {
     setIsOpen(false);
     resetWidgetState();
+    setAssistantContext(createInitialAssistantContext());
     emitQuickHelpOverlayChange(false);
   }
 
   function openWidget() {
     resetWidgetState();
+    setAssistantContext(createInitialAssistantContext());
     emitQuickHelpOverlayChange(true);
     setIsOpen(true);
+  }
+
+  async function handleLeadSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitState({ status: "loading", message: leadCopy.sending });
+
+    const result = await submitLead({
+      name: leadForm.name,
+      email: leadForm.email,
+      phone: leadForm.phone,
+      service: assistantContext.serviceTitle || answers.service,
+      package: assistantContext.packageName,
+      message: answers.service || assistantContext.serviceTitle || assistantContext.packageName || "Quick Help enquiry",
+      source: "quick_help_widget",
+      locale,
+      pagePath: `${window.location.pathname}${window.location.search}`,
+      intakeSummary: enquiryBody,
+      conversation: JSON.stringify({ answers, assistantContext }),
+      consent: leadForm.consent,
+      honeypot: leadForm.honeypot,
+    });
+
+    if (result.success) {
+      setSubmitState({ status: "success", message: leadCopy.success });
+      return;
+    }
+
+    const fallbackMessage =
+      result.reason === "lead_delivery_not_configured" || result.reason === "lead_delivery_failed"
+        ? `${result.message} ${leadCopy.fallback}`
+        : result.message;
+    setSubmitState({ status: "error", message: fallbackMessage });
   }
 
   useEffect(() => {
@@ -103,15 +219,24 @@ export function QuickHelpWidget({
       const detail = (event as CustomEvent<OpenAssistantEventDetail>).detail;
       const serviceAnswer = detail?.serviceTitle || detail?.serviceSlug || "";
 
+      setAssistantContext({
+        serviceSlug: detail?.serviceSlug || "",
+        serviceTitle: detail?.serviceTitle || "",
+        packageName: detail?.packageName || "",
+        sourcePage: detail?.sourcePage || "",
+        locale: detail?.locale || locale,
+      });
       setAnswers({ ...createInitialAnswers(), service: serviceAnswer });
       setStep(serviceAnswer ? 1 : 0);
+      setLeadForm(createInitialLeadForm());
+      setSubmitState({ status: "idle", message: "" });
       emitQuickHelpOverlayChange(true);
       setIsOpen(true);
     };
 
     window.addEventListener(OPEN_ASSISTANT_EVENT, onOpenAssistant as EventListener);
     return () => window.removeEventListener(OPEN_ASSISTANT_EVENT, onOpenAssistant as EventListener);
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -191,13 +316,63 @@ export function QuickHelpWidget({
                     >
                       {copy.actionWhatsApp}
                     </a>
-                    <a
-                      href={mailtoHref}
-                      onClick={closeWidget}
-                      className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-5 text-sm font-semibold text-[var(--text-main)]"
-                    >
-                      {copy.actionSubmit}
-                    </a>
+                    <form onSubmit={handleLeadSubmit} className="space-y-2 rounded-xl border border-[var(--line-soft)] bg-[var(--surface-subtle)] p-3">
+                      <input
+                        className="hidden"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={leadForm.honeypot}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, honeypot: event.target.value }))}
+                        aria-hidden="true"
+                      />
+                      <input
+                        required
+                        placeholder={leadCopy.name}
+                        value={leadForm.name}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, name: event.target.value }))}
+                        className="min-h-10 w-full rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <input
+                        type="email"
+                        placeholder={leadCopy.email}
+                        value={leadForm.email}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, email: event.target.value }))}
+                        className="min-h-10 w-full rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <input
+                        placeholder={leadCopy.phone}
+                        value={leadForm.phone}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, phone: event.target.value }))}
+                        className="min-h-10 w-full rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <label className="flex items-start gap-2 text-[0.75rem] leading-5 text-[var(--text-muted)]">
+                        <input
+                          required
+                          type="checkbox"
+                          checked={leadForm.consent}
+                          onChange={(event) => setLeadForm((prev) => ({ ...prev, consent: event.target.checked }))}
+                          className="mt-1"
+                        />
+                        <span>{leadCopy.consent}</span>
+                      </label>
+                      <p className="text-[0.72rem] leading-5 text-[var(--text-muted)]">{leadCopy.privacy}</p>
+                      {submitState.message ? (
+                        <p className="text-[0.78rem] leading-5 text-[var(--text-main)]">{submitState.message}</p>
+                      ) : null}
+                      <button
+                        type="submit"
+                        disabled={submitState.status === "loading" || submitState.status === "success"}
+                        className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[linear-gradient(180deg,#365d93_0%,#28456c_100%)] px-5 text-sm font-semibold text-white shadow-[0_14px_30px_-20px_rgba(33,54,89,0.8)] disabled:opacity-65"
+                      >
+                        {submitState.status === "loading" ? leadCopy.sending : copy.actionSubmit}
+                      </button>
+                      <a
+                        href={mailtoHref}
+                        className="inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-5 text-sm font-semibold text-[var(--text-main)]"
+                      >
+                        {leadCopy.fallback}
+                      </a>
+                    </form>
                   </div>
                 </>
               ) : (
@@ -301,13 +476,63 @@ export function QuickHelpWidget({
                     >
                       {copy.actionWhatsApp}
                     </a>
-                    <a
-                      href={mailtoHref}
-                      onClick={closeWidget}
-                      className="inline-flex min-h-11 w-full items-center justify-center rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-5 text-sm font-semibold text-[var(--text-main)]"
-                    >
-                      {copy.actionSubmit}
-                    </a>
+                    <form onSubmit={handleLeadSubmit} className="space-y-2 rounded-xl border border-[var(--line-soft)] bg-[var(--surface-subtle)] p-3">
+                      <input
+                        className="hidden"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={leadForm.honeypot}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, honeypot: event.target.value }))}
+                        aria-hidden="true"
+                      />
+                      <input
+                        required
+                        placeholder={leadCopy.name}
+                        value={leadForm.name}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, name: event.target.value }))}
+                        className="min-h-10 w-full rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <input
+                        type="email"
+                        placeholder={leadCopy.email}
+                        value={leadForm.email}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, email: event.target.value }))}
+                        className="min-h-10 w-full rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <input
+                        placeholder={leadCopy.phone}
+                        value={leadForm.phone}
+                        onChange={(event) => setLeadForm((prev) => ({ ...prev, phone: event.target.value }))}
+                        className="min-h-10 w-full rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-3 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <label className="flex items-start gap-2 text-[0.75rem] leading-5 text-[var(--text-muted)]">
+                        <input
+                          required
+                          type="checkbox"
+                          checked={leadForm.consent}
+                          onChange={(event) => setLeadForm((prev) => ({ ...prev, consent: event.target.checked }))}
+                          className="mt-1"
+                        />
+                        <span>{leadCopy.consent}</span>
+                      </label>
+                      <p className="text-[0.72rem] leading-5 text-[var(--text-muted)]">{leadCopy.privacy}</p>
+                      {submitState.message ? (
+                        <p className="text-[0.78rem] leading-5 text-[var(--text-main)]">{submitState.message}</p>
+                      ) : null}
+                      <button
+                        type="submit"
+                        disabled={submitState.status === "loading" || submitState.status === "success"}
+                        className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[linear-gradient(180deg,#365d93_0%,#28456c_100%)] px-5 text-sm font-semibold text-white shadow-[0_14px_30px_-20px_rgba(33,54,89,0.8)] disabled:opacity-65"
+                      >
+                        {submitState.status === "loading" ? leadCopy.sending : copy.actionSubmit}
+                      </button>
+                      <a
+                        href={mailtoHref}
+                        className="inline-flex min-h-10 w-full items-center justify-center rounded-lg border border-[var(--line-soft)] bg-[var(--surface-main)] px-5 text-sm font-semibold text-[var(--text-main)]"
+                      >
+                        {leadCopy.fallback}
+                      </a>
+                    </form>
                   </div>
                 </>
               ) : (

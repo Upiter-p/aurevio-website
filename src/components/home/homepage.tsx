@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { QuickHelpWidget } from "@/components/home/quick-help-widget";
 import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from "@/components/home/translations";
+import { ServiceAssistantButton } from "@/components/services/service-assistant-button";
+import { submitLead } from "@/lib/lead-submit";
 
 type WorkItem = HomeTranslations["work"]["items"][number];
 type OverlayEventDetail = { source: "menu" | "quick-help"; open: boolean };
@@ -21,6 +23,52 @@ const solutionLinksByIndex = [
   "/services/mobile-apps",
   "/services/qr-menu-restaurant-payments",
 ];
+const contactFormOptions: Record<Locale, string[]> = {
+  en: ["Website / landing page", "SEO / local visibility", "AI agent / automation", "Business automation", "Not sure yet"],
+  ua: ["Сайт / лендінг", "SEO / локальна видимість", "AI-агент / автоматизація", "Автоматизація бізнесу", "Поки не впевнений"],
+  ru: ["Сайт / лендинг", "SEO / локальная видимость", "AI-агент / автоматизация", "Автоматизация бизнеса", "Пока не уверен"],
+};
+const contactFormCopy = {
+  en: {
+    name: "Name",
+    email: "Email",
+    phone: "Phone / WhatsApp",
+    service: "Service interest",
+    message: "Message",
+    consent: "I agree that AurevioPro can contact me about this enquiry.",
+    privacy: "We’ll use your details only to respond to this enquiry.",
+    submit: "Send Enquiry",
+    sending: "Sending...",
+    success: "Thanks. Your enquiry was received.",
+    fallback: "If this does not send, please use WhatsApp or email as a backup.",
+  },
+  ua: {
+    name: "Ім’я",
+    email: "Email",
+    phone: "Телефон / WhatsApp",
+    service: "Послуга",
+    message: "Повідомлення",
+    consent: "Я погоджуюся, що AurevioPro може зв’язатися зі мною щодо цього запиту.",
+    privacy: "Ми використаємо ваші дані лише для відповіді на цей запит.",
+    submit: "Надіслати запит",
+    sending: "Надсилаємо...",
+    success: "Дякуємо. Ваш запит отримано.",
+    fallback: "Якщо запит не надішлеться, скористайтеся WhatsApp або email як резервним способом.",
+  },
+  ru: {
+    name: "Имя",
+    email: "Email",
+    phone: "Телефон / WhatsApp",
+    service: "Услуга",
+    message: "Сообщение",
+    consent: "Я согласен, что AurevioPro может связаться со мной по этому запросу.",
+    privacy: "Мы используем ваши данные только для ответа на этот запрос.",
+    submit: "Отправить запрос",
+    sending: "Отправляем...",
+    success: "Спасибо. Ваш запрос получен.",
+    fallback: "Если запрос не отправится, используйте WhatsApp или email как резервный способ.",
+  },
+};
 
 function localizeHref(href: string, lang: Locale) {
   if (lang === "en") return href;
@@ -176,7 +224,24 @@ export function HomePage() {
   const activeWorkSlide = workSlideState.lang === lang ? workSlideState.index : 0;
   const workScrollerRef = useRef<HTMLDivElement | null>(null);
   const strategyCallHref = `mailto:${copy.contact.email}?subject=${encodeURIComponent(copy.contact.strategyCallSubject)}`;
-  const whatsappHref = `https://wa.me/${copy.contact.whatsappNumber}`;
+  const whatsappHref = `https://wa.me/${copy.contact.whatsappNumber}?text=${encodeURIComponent(
+    "Hi AurevioPro, I’m interested in discussing a website, SEO, AI agent or automation project. I came from the AurevioPro homepage."
+  )}`;
+  const formCopy = contactFormCopy[lang];
+  const activeContactOptions = contactFormOptions[lang];
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: activeContactOptions[0],
+    message: "",
+    consent: false,
+    honeypot: "",
+  });
+  const [contactFormState, setContactFormState] = useState<{
+    status: "idle" | "loading" | "success" | "error";
+    message: string;
+  }>({ status: "idle", message: "" });
 
   function emitMenuOverlayChange(open: boolean) {
     if (typeof window === "undefined") return;
@@ -246,6 +311,36 @@ export function HomePage() {
     const slideWidth = getWorkSlideWidth();
     const delta = slideWidth > 0 ? slideWidth * direction : scroller.clientWidth * 0.9 * direction;
     scroller.scrollBy({ left: delta, behavior: "smooth" });
+  }
+
+  async function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setContactFormState({ status: "loading", message: formCopy.sending });
+
+    const result = await submitLead({
+      name: contactForm.name,
+      email: contactForm.email,
+      phone: contactForm.phone,
+      service: activeContactOptions.includes(contactForm.service) ? contactForm.service : activeContactOptions[0],
+      message: contactForm.message,
+      source: "homepage_contact_form",
+      locale: lang,
+      pagePath: `${window.location.pathname}${window.location.search}`,
+      consent: contactForm.consent,
+      honeypot: contactForm.honeypot,
+    });
+
+    if (result.success) {
+      setContactFormState({ status: "success", message: formCopy.success });
+      setContactForm((prev) => ({ ...prev, name: "", email: "", phone: "", message: "", consent: false, honeypot: "" }));
+      return;
+    }
+
+    const fallbackMessage =
+      result.reason === "lead_delivery_not_configured" || result.reason === "lead_delivery_failed"
+        ? `${result.message} ${formCopy.fallback}`
+        : result.message;
+    setContactFormState({ status: "error", message: fallbackMessage });
   }
 
   return (
@@ -551,6 +646,16 @@ export function HomePage() {
                     </li>
                   ))}
                 </ul>
+                <ServiceAssistantButton
+                  fallbackHref="#contact"
+                  locale={lang}
+                  packageName={item.name}
+                  serviceTitle={item.name}
+                  sourcePage="/#pricing"
+                  className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-white shadow-[0_14px_30px_-22px_rgba(33,54,89,0.8)]"
+                >
+                  {item.cta}
+                </ServiceAssistantButton>
               </article>
             ))}
           </div>
@@ -566,6 +671,95 @@ export function HomePage() {
           <p className="mx-auto mt-4 max-w-2xl text-[1rem] leading-8 text-[var(--text-muted)] sm:text-[1.08rem]">
             {copy.finalCta.subtitle}
           </p>
+          <form onSubmit={handleContactSubmit} className="mx-auto mt-7 grid max-w-2xl gap-3 text-left">
+            <input
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+              value={contactForm.honeypot}
+              onChange={(event) => setContactForm((prev) => ({ ...prev, honeypot: event.target.value }))}
+              aria-hidden="true"
+            />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="grid gap-1.5 text-[0.78rem] font-semibold text-[var(--text-main)]">
+                {formCopy.name}
+                <input
+                  required
+                  value={contactForm.name}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, name: event.target.value }))}
+                  className="min-h-11 rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-3 text-sm font-medium text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                />
+              </label>
+              <label className="grid gap-1.5 text-[0.78rem] font-semibold text-[var(--text-main)]">
+                {formCopy.email}
+                <input
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))}
+                  className="min-h-11 rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-3 text-sm font-medium text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                />
+              </label>
+              <label className="grid gap-1.5 text-[0.78rem] font-semibold text-[var(--text-main)]">
+                {formCopy.phone}
+                <input
+                  value={contactForm.phone}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, phone: event.target.value }))}
+                  className="min-h-11 rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-3 text-sm font-medium text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                />
+              </label>
+              <label className="grid gap-1.5 text-[0.78rem] font-semibold text-[var(--text-main)]">
+                {formCopy.service}
+                <select
+                  value={activeContactOptions.includes(contactForm.service) ? contactForm.service : activeContactOptions[0]}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, service: event.target.value }))}
+                  className="min-h-11 rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-3 text-sm font-medium text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+                >
+                  {activeContactOptions.map((option) => (
+                    <option key={option}>{option}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <label className="grid gap-1.5 text-[0.78rem] font-semibold text-[var(--text-main)]">
+              {formCopy.message}
+              <textarea
+                required
+                rows={4}
+                value={contactForm.message}
+                onChange={(event) => setContactForm((prev) => ({ ...prev, message: event.target.value }))}
+                className="rounded-lg border border-[var(--line-soft)] bg-[var(--surface-subtle)] px-3 py-2 text-sm font-medium text-[var(--text-main)] outline-none focus:border-[var(--accent)]"
+              />
+            </label>
+            <label className="flex items-start gap-2.5 text-[0.82rem] font-medium leading-6 text-[var(--text-muted)]">
+              <input
+                required
+                type="checkbox"
+                checked={contactForm.consent}
+                onChange={(event) => setContactForm((prev) => ({ ...prev, consent: event.target.checked }))}
+                className="mt-1"
+              />
+              <span>{formCopy.consent}</span>
+            </label>
+            <p className="text-[0.78rem] leading-5 text-[var(--text-muted)]">{formCopy.privacy}</p>
+            {contactFormState.message ? (
+              <p
+                className={`rounded-lg border px-3 py-2 text-sm font-medium ${
+                  contactFormState.status === "success"
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                    : "border-[var(--line-soft)] bg-[var(--surface-subtle)] text-[var(--text-main)]"
+                }`}
+              >
+                {contactFormState.message}
+              </p>
+            ) : null}
+            <button
+              type="submit"
+              disabled={contactFormState.status === "loading"}
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--accent)] px-6 text-sm font-semibold text-white shadow-[0_18px_36px_-22px_rgba(33,54,89,0.82)] disabled:opacity-65"
+            >
+              {contactFormState.status === "loading" ? formCopy.sending : formCopy.submit}
+            </button>
+          </form>
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
             <a
               href={strategyCallHref}
@@ -599,7 +793,7 @@ export function HomePage() {
       </footer>
 
       <MobileMenuOverlay open={isMobileMenuOpen} close={closeMobileMenu} copy={copy} lang={lang} />
-      <QuickHelpWidget key={lang} copy={copy.quickHelp} contact={copy.contact} />
+      <QuickHelpWidget key={lang} copy={copy.quickHelp} contact={copy.contact} locale={lang} />
     </div>
   );
 }
