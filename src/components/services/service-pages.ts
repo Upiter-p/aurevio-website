@@ -89,7 +89,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "lead-generation-websites",
     title: "Lead-Generation Websites",
-    metadataTitle: "Lead-Generation Websites for Small Businesses",
+    metadataTitle: "Lead Generation Websites for Service Businesses",
     description:
       "Lead-generation website design for small and local businesses that need clearer offers, stronger enquiry paths, and better contact flows.",
     hero: {
@@ -185,7 +185,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "website-design",
     title: "Website Design",
-    metadataTitle: "Website Design for Small Businesses",
+    metadataTitle: "Premium Website Design for Growing Businesses",
     description:
       "Professional website design for small businesses that need a premium, trustworthy, mobile-friendly site built around clear services and enquiries.",
     hero: {
@@ -281,7 +281,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "ai-agents",
     title: "AI Agents",
-    metadataTitle: "AI Agents for Businesses",
+    metadataTitle: "AI Agent Development for Businesses",
     description:
       "AI agent development for small businesses that want faster lead qualification, better follow-up, and practical automation around customer enquiries.",
     hero: {
@@ -377,7 +377,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "seo-landing-pages",
     title: "SEO Landing Pages",
-    metadataTitle: "SEO Landing Pages for Small Businesses",
+    metadataTitle: "SEO Landing Pages for Local Businesses",
     description:
       "SEO landing pages for service and local businesses that need clear, focused pages for services, locations, campaigns, and search intent.",
     hero: {

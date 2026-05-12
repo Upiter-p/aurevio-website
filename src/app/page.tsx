@@ -6,6 +6,12 @@ const siteUrl = "https://aurevio.pro";
 const pageTitle = "Lead-Generation Websites, AI Agents & SEO Pages for Small Businesses";
 const pageDescription =
   "AurevioPro helps small and local businesses turn their websites into clearer lead-generation systems with SEO landing pages, AI agents, WhatsApp lead capture, and automation.";
+const socialImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "AurevioPro - AI agents, lead-generation websites and automation for growing businesses",
+};
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -53,11 +59,13 @@ export const metadata: Metadata = {
     siteName: "AurevioPro",
     title: pageTitle,
     description: pageDescription,
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: pageTitle,
     description: pageDescription,
+    images: ["/twitter-image"],
   },
 };
 
