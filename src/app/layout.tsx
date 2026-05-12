@@ -5,6 +5,12 @@ import "./globals.css";
 const siteUrl = "https://aurevio.pro";
 const defaultDescription =
   "AurevioPro builds lead-generation websites, SEO landing pages, AI agents, and business automation systems for small and local businesses.";
+const socialImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "AurevioPro - AI agents, lead-generation websites and automation for growing businesses",
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,11 +40,13 @@ export const metadata: Metadata = {
     siteName: "AurevioPro",
     title: "AurevioPro | Lead-Generation Websites & AI Automation",
     description: defaultDescription,
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "AurevioPro | Lead-Generation Websites & AI Automation",
     description: defaultDescription,
+    images: ["/twitter-image"],
   },
   robots: {
     index: true,
