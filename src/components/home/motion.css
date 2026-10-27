@@ -17,3 +17,5 @@
 .video-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.motion-toggle{font-size:12px;color:var(--text-muted);text-decoration:underline;padding:12px 0;cursor:pointer}.motion-paused .float-chip,.motion-paused .video-badge{animation-play-state:paused}
 
 @media(prefers-reduced-motion:no-preference){.founder-photo{transform:translateY(var(--portrait-shift,0px)) scale(1.09);transition:transform .3s ease-out}.founder-card:hover .founder-photo{transform:translateY(var(--portrait-shift,0px)) scale(1.12)}.motion-paused .founder-photo{transform:scale(1.09)}}
+
+.design-video{pointer-events:none}@media(max-width:640px){.design-video{aspect-ratio:16/9;object-fit:contain}}
