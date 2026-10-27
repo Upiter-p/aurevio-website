@@ -8,6 +8,8 @@ import { createPortal } from "react-dom";
 import { QuickHelpWidget } from "@/components/home/quick-help-widget";
 import { LOCALES, getHomeTranslations, type HomeTranslations, type Locale } from "@/components/home/translations";
 import { ServiceAssistantButton } from "@/components/services/service-assistant-button";
+import { StudioSections, StudioIntro } from "@/components/home/studio-sections";
+import "./studio.css";
 import { submitLead } from "@/lib/lead-submit";
 
 type WorkItem = HomeTranslations["work"]["items"][number];
@@ -218,7 +220,7 @@ function MobileMenuOverlay({ open, close, copy, lang }: MobileMenuOverlayProps) 
 export function HomePage() {
   const searchParams = useSearchParams();
   const { locale: lang, copy } = getHomeTranslations(searchParams.get("lang"));
-  const hasHeroImage = true;
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [workSlideState, setWorkSlideState] = useState<{ lang: Locale; index: number }>({ lang, index: 0 });
   const activeWorkSlide = workSlideState.lang === lang ? workSlideState.index : 0;
@@ -344,28 +346,11 @@ export function HomePage() {
   }
 
   return (
-    <div className="bg-[var(--bg-main)]">
-      <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen min-h-[96svh] overflow-hidden border-b border-[var(--line-soft)] bg-[#0d1117]">
-        {hasHeroImage ? (
-          <Image
-            src="/images/home/hero-main.png"
-            alt={copy.hero.visualAlt}
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-        ) : null}
-
-        <div
-          className="absolute inset-0 bg-[linear-gradient(108deg,rgba(8,12,18,0.56)_0%,rgba(8,12,18,0.47)_36%,rgba(8,12,18,0.24)_63%,rgba(8,12,18,0.4)_100%)]"
-          aria-hidden
-        />
-        <div className="absolute inset-x-0 top-0 h-32 bg-[linear-gradient(180deg,rgba(0,0,0,0.1),transparent)]" aria-hidden />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(0deg,rgba(0,0,0,0.08),transparent)]" aria-hidden />
-
-        <header className="relative z-10 mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 pb-3 pt-5 sm:px-6 sm:pb-4 sm:pt-6 lg:px-10">
-          <p className="text-base font-semibold tracking-[-0.01em] text-white">{copy.brand}</p>
+    <div className="studio-home bg-[var(--bg-main)]">
+      <a className="studio-skip" href="#main-content">{lang === "en" ? "Skip to content" : lang === "ua" ? "До основного вмісту" : "К основному содержимому"}</a>
+      <section className="studio-hero">
+        <header className="studio-nav relative z-10 mx-auto flex w-full max-w-[1240px] items-center justify-between px-4 pb-3 pt-5 sm:px-6 sm:pb-4 sm:pt-6 lg:px-10">
+          <a href={localizeHref("/", lang)} className="studio-logo" aria-label="AurevioPro">Aurevio<span>Pro</span><i aria-hidden>✳</i></a>
 
           <div className="hidden items-center gap-6 md:flex">
             <nav className="flex items-center gap-6 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white/72">
@@ -403,7 +388,7 @@ export function HomePage() {
           </div>
         </header>
 
-        <div className="relative z-10 mx-auto flex min-h-[calc(96svh-78px)] w-full max-w-[1240px] items-center px-4 pb-10 sm:px-6 sm:pb-12 lg:px-10 lg:pb-14">
+        <div className="studio-hero-content relative z-10 mx-auto flex min-h-[calc(96svh-78px)] w-full max-w-[1240px] items-center px-4 pb-10 sm:px-6 sm:pb-12 lg:px-10 lg:pb-14">
           <div className="max-w-[740px] space-y-8">
             <p className="inline-flex items-center rounded-full bg-white/12 px-4 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/90">
               {copy.hero.eyebrow}
@@ -434,8 +419,9 @@ export function HomePage() {
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-[1240px] px-4 pb-14 pt-5 sm:px-6 sm:pb-16 sm:pt-6 lg:px-10">
-        <section className="mt-5 rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-4 sm:p-5">
+      <main id="main-content" className="mx-auto w-full max-w-[1240px] px-4 pb-14 pt-5 sm:px-6 sm:pb-16 sm:pt-6 lg:px-10">
+        <StudioIntro lang={lang} />
+        <section className="studio-capabilities mt-5 rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-4 sm:p-5">
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {copy.capabilities.map((item, index) => (
               <li
@@ -477,13 +463,14 @@ export function HomePage() {
                 <Link
                   key={item.title}
                   href={href}
-                  className={`group block rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_18px_40px_-35px_rgba(14,19,28,0.7)] transition hover:-translate-y-0.5 hover:border-[var(--line-strong)] ${
+                  className={`studio-service group block rounded-2xl border border-[var(--line-soft)] bg-[var(--surface-main)] p-5 shadow-[0_18px_40px_-35px_rgba(14,19,28,0.7)] transition hover:-translate-y-0.5 hover:border-[var(--line-strong)] ${
                     copy.solutions.items.length % 3 === 1 && index === copy.solutions.items.length - 1
                       ? "lg:col-start-2"
                       : ""
                   }`}
                 >
                   <article>
+                    <span className="studio-service-number" aria-hidden>{String(index + 1).padStart(2, "0")} /</span>
                     <h3 className="text-[1.12rem] font-semibold tracking-[-0.012em] text-[var(--text-main)]">
                       {item.title}
                     </h3>
@@ -661,6 +648,8 @@ export function HomePage() {
           </div>
         </section>
 
+        <StudioSections lang={lang} />
+
         <section
           id="contact"
           className="mt-12 rounded-[1.8rem] border border-[var(--line-soft)] bg-[var(--surface-main)] px-6 py-10 text-center shadow-[0_26px_58px_-42px_rgba(14,19,28,0.85)] sm:px-8"
@@ -743,6 +732,7 @@ export function HomePage() {
             <p className="text-[0.78rem] leading-5 text-[var(--text-muted)]">{formCopy.privacy}</p>
             {contactFormState.message ? (
               <p
+                role="status" aria-live="polite"
                 className={`rounded-lg border px-3 py-2 text-sm font-medium ${
                   contactFormState.status === "success"
                     ? "border-emerald-200 bg-emerald-50 text-emerald-800"
@@ -777,7 +767,8 @@ export function HomePage() {
         </section>
       </main>
 
-      <footer className="border-t border-[var(--line-soft)] bg-[var(--surface-main)]">
+      <footer className="studio-footer border-t border-[var(--line-soft)] bg-[var(--surface-main)]">
+        <div className="studio-footer-wordmark" aria-hidden>AurevioPro<span>✳</span></div>
         <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-4 py-7 text-[0.86rem] text-[var(--text-muted)] sm:px-6 lg:px-10">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <p className="font-semibold tracking-[-0.01em] text-[var(--text-main)]">{copy.brand}</p>

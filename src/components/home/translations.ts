@@ -143,10 +143,10 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       languageSwitcherAriaLabel: "Language switcher",
     },
     hero: {
-      eyebrow: "Premium websites, SEO & ads",
-      title: "Turn your website into a real source of enquiries.",
+      eyebrow: "London-based digital studio",
+      title: "Better websites. Smarter business.",
       subtitle:
-        "We build premium websites, landing pages, paid campaigns, and lead-handling systems that help businesses attract better leads and convert more attention into action.",
+        "Websites, mobile apps and AI automation. We connect thoughtful design with practical technology to help your business move forward.",
       primaryCta: "Book Strategy Call",
       secondaryCta: "View Work",
       visualAlt: "AurevioPro digital growth workspace",
@@ -154,7 +154,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     capabilities: ["Websites", "SEO", "Paid Ads", "Automation"],
     solutions: {
       eyebrow: "Solutions",
-      title: "Modular growth capabilities.",
+      title: "From your first idea to your next stage.",
       cta: "Get Recommendation",
       cardCta: "Learn more",
       items: [
@@ -192,7 +192,7 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
     },
     work: {
       eyebrow: "Selected Work",
-      title: "Proof of execution.",
+      title: "Ideas made real.",
       viewDetails: "View Details",
       imageAltSuffix: "case study preview",
       previousSlideAriaLabel: "Previous work slide",
@@ -206,9 +206,9 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         },
         {
           category: "Website",
-          title: "RosPro Engineering",
+          title: "RosPro Interiors",
           image: "/images/home/case-rospro.png",
-          result: "Clearer service architecture and lead routing for technical buyers.",
+          result: "A multilingual showcase for bespoke kitchens and interiors across the UK, Italy and Ukraine.",
         },
         {
           category: "Mobile App",
@@ -396,10 +396,10 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       languageSwitcherAriaLabel: "Перемикач мови",
     },
     hero: {
-      eyebrow: "Преміальні сайти, SEO та реклама",
-      title: "Перетворіть свій сайт на реальне джерело заявок.",
+      eyebrow: "Цифрова студія в Лондоні",
+      title: "Кращі сайти. Розумніший бізнес.",
       subtitle:
-        "Ми створюємо преміальні сайти, цільові сторінки, рекламні кампанії та системи обробки лідів, які допомагають залучати кращих клієнтів і перетворювати увагу в дію.",
+        "Сайти, мобільні додатки та AI-автоматизація. Поєднуємо продуманий дизайн із практичними технологіями, щоб ваш бізнес рухався вперед.",
       primaryCta: "Замовити стратегічний дзвінок",
       secondaryCta: "Переглянути роботи",
       visualAlt: "Робочий простір AurevioPro для цифрового зростання",
@@ -459,9 +459,9 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         },
         {
           category: "Сайт",
-          title: "RosPro Engineering",
+          title: "RosPro Interiors",
           image: "/images/home/case-rospro.png",
-          result: "Чітка архітектура послуг і маршрутизація заявок для технічних клієнтів.",
+          result: "Багатомовний сайт меблів та інтер’єрів на замовлення для Великої Британії, Італії та України.",
         },
         {
           category: "Мобільний додаток",
@@ -649,10 +649,10 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
       languageSwitcherAriaLabel: "Переключатель языка",
     },
     hero: {
-      eyebrow: "Премиальные сайты, SEO и реклама",
-      title: "Превратите сайт в реальный источник заявок.",
+      eyebrow: "Цифровая студия в Лондоне",
+      title: "Лучше сайты. Умнее бизнес.",
       subtitle:
-        "Мы создаём премиальные сайты, лендинги, рекламные кампании и системы обработки лидов, которые помогают привлекать лучших клиентов и превращать внимание в действие.",
+        "Сайты, мобильные приложения и AI-автоматизация. Соединяем продуманный дизайн с практичными технологиями, чтобы ваш бизнес двигался вперёд.",
       primaryCta: "Заказать стратегический звонок",
       secondaryCta: "Посмотреть работы",
       visualAlt: "Рабочее пространство AurevioPro для цифрового роста",
@@ -712,9 +712,9 @@ export const homeTranslations: Record<Locale, HomeTranslations> = {
         },
         {
           category: "Сайт",
-          title: "RosPro Engineering",
+          title: "RosPro Interiors",
           image: "/images/home/case-rospro.png",
-          result: "Более понятная архитектура услуг и маршрутизация лидов для технических клиентов.",
+          result: "Многоязычный сайт мебели и интерьеров на заказ для Великобритании, Италии и Украины.",
         },
         {
           category: "Мобильное приложение",
