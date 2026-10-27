@@ -297,19 +297,33 @@ export function HomePage() {
         const element = entry.target as HTMLElement;
         if (!reduced.matches) {
           const animation = element.animate([
-            { opacity: 0.35, transform: "translateY(28px)" },
+            { opacity: 0, transform: "translateY(64px) scale(.96)" },
             { opacity: 1, transform: "translateY(0)" },
-          ], { duration: 800, easing: "cubic-bezier(.16,1,.3,1)" });
+          ], { duration: 1100, easing: "cubic-bezier(.16,1,.3,1)" });
           animations.add(animation);
           animation.finished.then(() => animations.delete(animation)).catch(() => {});
         }
         observer.unobserve(element);
       }
-    }, { threshold: 0.08 });
-    document.querySelectorAll(".aurevio-original main > section:not(#founders), .founders-intro, .founder-card, .founders-closing").forEach(el => observer.observe(el));
+    }, { threshold: 0.18, rootMargin: "0px 0px -24px 0px" });
+    document.querySelectorAll(".aurevio-original h1, .aurevio-original main h2, #services > div > a, #pricing article, #highlights article, .founder-card, .founders-closing, .video-shell").forEach(el => observer.observe(el));
+    let frame = 0;
+    const portraits = Array.from(document.querySelectorAll<HTMLElement>(".founder-portrait"));
+    const updatePortraits = () => {
+      frame = 0;
+      if (reduced.matches) return;
+      portraits.forEach((portrait) => {
+        const rect = portrait.getBoundingClientRect();
+        const progress = Math.max(-1, Math.min(1, (window.innerHeight / 2 - rect.top - rect.height / 2) / window.innerHeight));
+        portrait.style.setProperty("--portrait-shift", `${progress * 36}px`);
+      });
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(updatePortraits); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    updatePortraits();
     const stop = () => { if (reduced.matches) { observer.disconnect(); animations.forEach(a => a.cancel()); document.documentElement.style.scrollBehavior = previousScroll; } };
     reduced.addEventListener("change", stop);
-    return () => { document.documentElement.style.scrollBehavior = previousScroll; observer.disconnect(); animations.forEach(a => a.cancel()); reduced.removeEventListener("change", stop); };
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); portraits.forEach(p => p.style.removeProperty("--portrait-shift")); document.documentElement.style.scrollBehavior = previousScroll; observer.disconnect(); animations.forEach(a => a.cancel()); reduced.removeEventListener("change", stop); };
   }, [lang]);
 
   function getWorkSlideWidth() {
@@ -461,6 +475,7 @@ export function HomePage() {
                 {copy.hero.secondaryCta}
               </a>
             </div>
+            <div className="hero-floats" aria-hidden="true"><span className="float-chip"><b>↗</b> Web design</span><span className="float-chip"><b>⌘</b> Apps & automation</span><span className="float-chip"><b>✦</b> From idea to launch</span></div>
           </div>
         </div>
       </section>
