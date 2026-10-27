@@ -1,6 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { BuildShowcase } from "./build-showcase";
+import { Founders } from "./founders";
+import "./motion.css";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type FormEvent, useEffect, useRef, useState } from "react";
@@ -281,6 +284,34 @@ export function HomePage() {
     };
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduced.matches || !("IntersectionObserver" in window)) return;
+    const previousScroll = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "smooth";
+    const animations = new Set<Animation>();
+    // Animate on entry instead of hiding content in advance: fail open if JS fails.
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const element = entry.target as HTMLElement;
+        if (!reduced.matches) {
+          const animation = element.animate([
+            { opacity: 0.35, transform: "translateY(28px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ], { duration: 800, easing: "cubic-bezier(.16,1,.3,1)" });
+          animations.add(animation);
+          animation.finished.then(() => animations.delete(animation)).catch(() => {});
+        }
+        observer.unobserve(element);
+      }
+    }, { threshold: 0.08 });
+    document.querySelectorAll(".aurevio-original main > section:not(#founders), .founders-intro, .founder-card, .founders-closing").forEach(el => observer.observe(el));
+    const stop = () => { if (reduced.matches) { observer.disconnect(); animations.forEach(a => a.cancel()); document.documentElement.style.scrollBehavior = previousScroll; } };
+    reduced.addEventListener("change", stop);
+    return () => { document.documentElement.style.scrollBehavior = previousScroll; observer.disconnect(); animations.forEach(a => a.cancel()); reduced.removeEventListener("change", stop); };
+  }, [lang]);
+
   function getWorkSlideWidth() {
     const scroller = workScrollerRef.current;
     if (!scroller) return 0;
@@ -344,7 +375,7 @@ export function HomePage() {
   }
 
   return (
-    <div className="bg-[var(--bg-main)]">
+    <div className="aurevio-original bg-[var(--bg-main)]">
       <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen min-h-[96svh] overflow-hidden border-b border-[var(--line-soft)] bg-[#0d1117]">
         {hasHeroImage ? (
           <Image
@@ -497,6 +528,8 @@ export function HomePage() {
             })}
           </div>
         </section>
+
+        <BuildShowcase lang={lang} />
 
         <section id="work" className="mt-12 space-y-6">
           <header className="flex items-end justify-between gap-4">
@@ -660,6 +693,8 @@ export function HomePage() {
             ))}
           </div>
         </section>
+
+        <Founders lang={lang} />
 
         <section
           id="contact"
